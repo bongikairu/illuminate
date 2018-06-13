@@ -422,7 +422,7 @@
                     commend_forgive,
                 } = data;
 
-                const outcome_el = outcome ? `<span class="win ml-3 font-weight-bold">WIN</span>` : `<span class="lose ml-3 font-weight-bold">LOSE</span>`;
+                const outcome_el =  outcome === "" ? "" : (outcome ? `<span class="win ml-3 font-weight-bold">WIN</span>` : `<span class="lose ml-3 font-weight-bold">LOSE</span>`);
 
                 const col1 = (`<td class="match"><a href="${match_viewer_url}${match_id}" target="_blank">${match_id}</a> ${outcome_el}<br />${date_string}</td>`);
                 const col2 = (`<td class="icon"><img src="${hero_img}" height="30"><br /><span class="score_k">${score_k}</span><span class="kda_spacer">/</span><span class="score_d">${score_d}</span><span class="kda_spacer">/</span><span class="score_a">${score_a}</span></td>`);
