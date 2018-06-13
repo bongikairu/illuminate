@@ -523,7 +523,16 @@
             };
 
             const process = (row, i) => {
-                if (!row) return;
+                if (!row) {
+                    if (i < data.length - 1) {
+                        setTimeout(() => {
+                            process(data[i + 1], i + 1);
+                        }, 100); // throttle to 1 request/sec
+                    } else {
+                        $("#loading").hide();
+                    }
+                    return;
+                }
                 console.log(row);
                 const parsed_row = [row.split("-")[0], ...row.split("-")[1].split("")];
                 const match_id = parsed_row[0];
