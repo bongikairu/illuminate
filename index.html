@@ -53,6 +53,10 @@
             margin-right: 0.3em;
         }
 
+        #rip {
+            font-size: 0.3em;
+        }
+
     </style>
 </head>
 
@@ -117,8 +121,9 @@
 
     <div class="mt-3 text-center text-muted">
 
-        <div>by @bongikairu</div>
-        <div>RIP yearbeast and d2armory</div>
+        <div>by <a href="https://github.com/bongikairu">@bongikairu</a></div>
+        <div>Powered by <a href="https://docs.opendota.com/">OpenDota API</a></div>
+        <div id="rip">RIP yearbeast and d2armory</div>
 
     </div>
 
@@ -532,7 +537,7 @@
                     if (i < data.length - 1) {
                         setTimeout(() => {
                             process(data[i + 1], i + 1);
-                        }, 1000);
+                        }, 1000); // throttle to 1 request/sec
                     }
                 });
             };
