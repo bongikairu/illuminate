@@ -43,20 +43,20 @@
             background: #1c2127;
         }
 
-        .opendota {
+        a.opendota {
             text-decoration: none;
             font-weight: bolder;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Droid Sans", Ubuntu, Cantarell, "Fira Sans", Helvetica, Arial, sans-serif;
         }
 
-        .dotabuff {
+        a.dotabuff {
             text-decoration: none;
             background: red;
             font-weight: bold;
             padding: 0 2px;
         }
 
-        .stratz {
+        a.stratz {
             text-decoration: none;
             font-weight: bold;
             padding: 0 2px;
@@ -453,7 +453,7 @@
 
                 const outcome_el = outcome === "" ? "" : (outcome ? `<span class="win ml-3 font-weight-bold">WIN</span>` : `<span class="lose ml-3 font-weight-bold">LOSE</span>`);
 
-                const col1 = (`<td class="match"><a href="https://www.opendota.com/matches/${match_id}" target="_blank">${match_id}</a> ${outcome_el}<br /><span class="gamemode">${gamemode}</span><span class="duration">${duration}</span><a class="opendota" href="https://www.opendota.com/matches/${match_id}">&lt;/&gt;</a> <a class="dotabuff" href="https://www.dotabuff.com/matches/${match_id}">D</a> <a class="stratz" href="https://stratz.com/en-us/match/${match_id}">⇑</a><br />${date_string}</td>`);
+                const col1 = (`<td class="match"><a href="https://www.opendota.com/matches/${match_id}" target="_blank">${match_id}</a> ${outcome_el}<br /><span class="gamemode mr-1">${gamemode}</span><span class="duration mr-1">${duration}</span><a class="opendota" href="https://www.opendota.com/matches/${match_id}">&lt;/&gt;</a> <a class="dotabuff" href="https://www.dotabuff.com/matches/${match_id}">D</a> <a class="stratz" href="https://stratz.com/en-us/match/${match_id}">⇑</a><br />${date_string}</td>`);
                 const col2 = (`<td class="icon pb-1"><img class="mb-1" src="${hero_img}" height="30"><br /><span class="score_k">${score_k}</span><span class="kda_spacer">/</span><span class="score_d">${score_d}</span><span class="kda_spacer">/</span><span class="score_a">${score_a}</span></td>`);
                 let summary_list = [];
                 if (report_comm) summary_list.push(`<span class="report"><i class="far fa-headphones"></i> Reported: Comm Abuse</span>`);
