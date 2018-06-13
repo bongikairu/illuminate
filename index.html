@@ -707,7 +707,7 @@
                         if (i < data.length - 1) {
                             setTimeout(() => {
                                 process(data[i + 1], i + 1);
-                            }, 1000); // throttle to 1 request/sec
+                            }, 5000); // throttle to 1 request/sec
                         } else {
                             $loading.hide();
                         }
