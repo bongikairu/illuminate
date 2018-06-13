@@ -576,7 +576,7 @@
                             process(data[i + 1], i + 1);
                         }, 100); // throttle to 1 request/sec
                     } else {
-                        $loading.hide();
+                        $loading.css('display', 'none');
                     }
                 } else {
                     $.get(`https://api.opendota.com/api/matches/${match_id}`).done((response) => {
@@ -709,7 +709,7 @@
                                 process(data[i + 1], i + 1);
                             }, 5000); // throttle to 1 request/sec
                         } else {
-                            $loading.hide();
+                            $loading.css('display', 'none');
                         }
                     });
                 }
