@@ -126,7 +126,16 @@
         </div>
     </div>
 
-    <div id="instruction" class="mt-3">
+    <div id="whatis" class="hideondata">
+        <h3>What is this?</h3>
+        Illuminate is a tool that help you browser through a newly revealed report/commendation
+        data that valve exposed due to EU GDPR regulation. Data in its raw form is not hard to read
+        but might be tiresome to go through. Illuminate fill that gap by automatically fetching matches
+        data for you. This tool is powered mainly by OpenDota API and did everything client-side. That
+        means no data is event transferred to us and is only yours to see.
+    </div>
+
+    <div id="instruction" class="mt-3 hideondata">
         <h3>How to use</h3>
         <ol>
             <li>
@@ -153,9 +162,9 @@
     <div class="mt-3">
         <h3>Privacy Policy</h3>
         <div>
-            Your Dota 2 data will not be kept on the server. Google Analytics, however, will keep a record of your visit
-            for
-            analytical used.
+            This tool is powered mainly by OpenDota API and did everything client-side. That
+            means no data is event transferred to us and is only yours to see. Google Analytics,
+            however, will keep an anonymous record of your visit for analytical used.
         </div>
     </div>
 
@@ -420,6 +429,7 @@
 
         if (location.hash && location.hash !== "#") {
             const $output = $("#output");
+            $(".hideondata").hide();
             $output.show();
             const raw_data = location.hash.substring(1);
             const data = raw_data.split(",");
