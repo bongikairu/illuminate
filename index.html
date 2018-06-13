@@ -523,31 +523,8 @@
                 const commend_friend = parsed_row[7] === "1";
                 const commend_forgive = parsed_row[8] === "1";
                 if (isNaN(parseInt(match_id))) return;
-                $.get(`https://api.opendota.com/api/matches/${match_id}`).done((response) => {
-                    if (response.error) {
-                        console.log(`Error retrieving ${match_id}`);
-                        // $tbody.append(`<tr><td colspan="3">Error retrieving ${match_id}</td></tr>`);
-                        create_row({
-                            match_id,
-                            date_string: "Error Match not found",
-                            outcome: "",
-                            gamemode: "",
-                            duration: "",
-                            score_k: "-",
-                            score_d: "-",
-                            score_a: "-",
-                            hero_img: "http://via.placeholder.com/127x71?text=Error",
-                            report_comm,
-                            report_abi,
-                            report_feed,
-                            commend_lead,
-                            commend_teach,
-                            commend_friend,
-                            commend_forgive,
-                        });
-                        return;
-                    }
 
+                const process_response = (response) => {
                     const timestamp = response.start_time;
                     const date_obj = new Date(timestamp * 1000);
                     const date_string = date_obj.toLocaleString();
@@ -630,34 +607,73 @@
                         commend_friend,
                         commend_forgive,
                     });
-                }).fail(() => {
-                    console.log(`Error retrieving ${match_id}`);
-                    // $tbody.append(`<tr><td colspan="3">Error retrieving ${match_id}</td></tr>`);
-                    create_row({
-                        match_id,
-                        date_string: "Error OpenDota not responding",
-                        outcome: "",
-                        gamemode: "",
-                        duration: "",
-                        score_k: "-",
-                        score_d: "-",
-                        score_a: "-",
-                        hero_img: "http://via.placeholder.com/127x71?text=Error",
-                        report_comm,
-                        report_abi,
-                        report_feed,
-                        commend_lead,
-                        commend_teach,
-                        commend_friend,
-                        commend_forgive,
-                    });
-                }).always(() => {
+                };
+
+                const cache = localStorage.getItem(`match-${match_id}`);
+                if (cache) {
+                    process_response(JSON.parse(cache));
                     if (i < data.length - 1) {
                         setTimeout(() => {
                             process(data[i + 1], i + 1);
-                        }, 1000); // throttle to 1 request/sec
+                        }, 100); // throttle to 1 request/sec
                     }
-                });
+                } else {
+                    $.get(`https://api.opendota.com/api/matches/${match_id}`).done((response) => {
+                        if (response.error) {
+                            console.log(`Error retrieving ${match_id}`);
+                            // $tbody.append(`<tr><td colspan="3">Error retrieving ${match_id}</td></tr>`);
+                            create_row({
+                                match_id,
+                                date_string: "Error Match not found",
+                                outcome: "",
+                                gamemode: "",
+                                duration: "",
+                                score_k: "-",
+                                score_d: "-",
+                                score_a: "-",
+                                hero_img: "http://via.placeholder.com/127x71?text=Error",
+                                report_comm,
+                                report_abi,
+                                report_feed,
+                                commend_lead,
+                                commend_teach,
+                                commend_friend,
+                                commend_forgive,
+                            });
+                            return;
+                        }
+                        localStorage.setItem(`match-${match_id}`, JSON.stringify(response));
+                        process_response(response);
+
+                    }).fail(() => {
+                        console.log(`Error retrieving ${match_id}`);
+                        // $tbody.append(`<tr><td colspan="3">Error retrieving ${match_id}</td></tr>`);
+                        create_row({
+                            match_id,
+                            date_string: "Error OpenDota not responding",
+                            outcome: "",
+                            gamemode: "",
+                            duration: "",
+                            score_k: "-",
+                            score_d: "-",
+                            score_a: "-",
+                            hero_img: "http://via.placeholder.com/127x71?text=Error",
+                            report_comm,
+                            report_abi,
+                            report_feed,
+                            commend_lead,
+                            commend_teach,
+                            commend_friend,
+                            commend_forgive,
+                        });
+                    }).always(() => {
+                        if (i < data.length - 1) {
+                            setTimeout(() => {
+                                process(data[i + 1], i + 1);
+                            }, 1000); // throttle to 1 request/sec
+                        }
+                    });
+                }
             };
             process(data[1], 1);
         }
