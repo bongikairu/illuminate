@@ -123,6 +123,9 @@
 
                 </p>
             </div>
+            <div id="loading" class="card-footer">
+                <i class="far fa-spinner fa-spin"></i> Loading ...
+            </div>
         </div>
     </div>
 
@@ -447,8 +450,8 @@
             $("#output_data").append($table);
             $table.append($tbody);
 
-            const $loading = $(`<div id="loading">Loading ...</div>`);
-            $("#output_data").append($loading);
+            // const $loading = $(`<div id="loading">Loading ...</div>`);
+            // $("#output_data").append($loading);
 
             const create_row = (data) => {
                 const {
@@ -576,7 +579,7 @@
                             process(data[i + 1], i + 1);
                         }, 100); // throttle to 1 request/sec
                     } else {
-                        $loading.css('display', 'none');
+                        $("#loading").hide();
                     }
                 } else {
                     $.get(`https://api.opendota.com/api/matches/${match_id}`).done((response) => {
@@ -709,7 +712,7 @@
                                 process(data[i + 1], i + 1);
                             }, 5000); // throttle to 1 request/sec
                         } else {
-                            $loading.css('display', 'none');
+                            $("#loading").hide();
                         }
                     });
                 }
