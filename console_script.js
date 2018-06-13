@@ -13,9 +13,13 @@
         }
         window.location = "https://illuminate.dotasphere.com/#" + all_output;
     };
-    const has_more = () => document.getElementById("load_more_button").style.display !== "none" || document.getElementById("inventory_history_loading").style.display !== "none";
-    const has_load_more = () => document.getElementById("load_more_button").style.display !== "none";
-    const load_more = () => document.getElementById("load_more_button").click();
+    const b1 = document.getElementById("load_more_button");
+    const b2 = document.getElementById("inventory_history_loading");
+    const has_more = () => {
+        return (b1 && b1.style.display !== "none") || (b2 && b2.style.display !== "none");
+    };
+    const has_load_more = () => b1 && b1.style.display !== "none";
+    const load_more = () => b1.click();
     const watch_load_more = () => {
         const interval = setInterval(() => {
             if(has_load_more()) {
@@ -28,6 +32,6 @@
                 }
             }
         }, 100);
-    }
+    };
     watch_load_more();
-})();
+})()
