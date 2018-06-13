@@ -37,6 +37,14 @@
             background: #1c2127;
         }
 
+        .win {
+            color: #5cb85c;
+        }
+
+        .lose {
+            color: #d9534f;
+        }
+
         .score_k {
             color: #5cb85c;
         }
@@ -400,6 +408,7 @@
                 const {
                     match_id,
                     date_string,
+                    outcome,
                     score_k,
                     score_d,
                     score_a,
@@ -412,7 +421,10 @@
                     commend_friend,
                     commend_forgive,
                 } = data;
-                const col1 = (`<td class="match"><a href="${match_viewer_url}${match_id}" target="_blank">${match_id}</a><br />${date_string}</td>`);
+
+                const outcome_el = outcome ? `<span class="win ml-3 font-weight-bold">WIN</span>` : `<span class="lose ml-3 font-weight-bold">LOSE</span>`;
+
+                const col1 = (`<td class="match"><a href="${match_viewer_url}${match_id}" target="_blank">${match_id}</a> ${outcome_el}<br />${date_string}</td>`);
                 const col2 = (`<td class="icon"><img src="${hero_img}" height="30"><br /><span class="score_k">${score_k}</span><span class="kda_spacer">/</span><span class="score_d">${score_d}</span><span class="kda_spacer">/</span><span class="score_a">${score_a}</span></td>`);
                 let summary_list = [];
                 if (report_comm) summary_list.push(`<span class="report"><i class="far fa-headphones"></i> Reported: Comm Abuse</span>`);
@@ -445,6 +457,7 @@
                         create_row({
                             match_id,
                             date_string: "Error",
+                            outcome: "",
                             score_k: "-",
                             score_d: "-",
                             score_a: "-",
@@ -467,6 +480,7 @@
                         create_row({
                             match_id,
                             date_string: "Error",
+                            outcome: "",
                             score_k: "-",
                             score_d: "-",
                             score_a: "-",
@@ -489,6 +503,7 @@
                         create_row({
                             match_id,
                             date_string: "Error",
+                            outcome: "",
                             score_k: "-",
                             score_d: "-",
                             score_a: "-",
@@ -512,9 +527,11 @@
                     const timestamp = response.start_time;
                     const date_obj = new Date(timestamp * 1000);
                     const date_string = date_obj.toLocaleString();
+                    const outcome = player.win;
                     create_row({
                         match_id,
                         date_string,
+                        outcome,
                         score_k,
                         score_d,
                         score_a,
@@ -533,6 +550,7 @@
                     create_row({
                         match_id,
                         date_string: "Error",
+                        outcome: "",
                         score_k: "-",
                         score_d: "-",
                         score_a: "-",
