@@ -427,6 +427,11 @@
             $("#script_box").select();
         });
 
+        // clear broken data
+        for (let key in localStorage) {
+            if (key.startsWith("match-")) localStorage.removeItem(key);
+        }
+
         if (location.hash && location.hash !== "#") {
             const $output = $("#output");
             $(".hideondata").hide();
@@ -526,73 +531,9 @@
                 const commend_forgive = parsed_row[8] === "1";
                 if (isNaN(parseInt(match_id))) return;
 
-                const process_response = (response) => {
-                    const timestamp = response.start_time;
-                    const date_obj = new Date(timestamp * 1000);
-                    const date_string = date_obj.toLocaleString();
+                const process_response = (match_data) => {
 
-                    const gamemode = formatGameMode(response.lobby_type, response.game_mode);
-                    const duration = formatDuration(response.duration);
-
-                    const players = response.players.filter((p) => p.personaname === name);
-                    const player = players.length > 0 ? players[0] : null;
-                    if (!player) {
-                        console.log(`Error retrieving player data of ${match_id}`);
-                        // $tbody.append(`<tr><td colspan="3">Error retrieving player data of ${match_id}</td></tr>`);
-                        create_row({
-                            match_id,
-                            date_string: date_string + "<br />Error Unable to identify your hero",
-                            outcome: "",
-                            gamemode,
-                            duration,
-                            score_k: "-",
-                            score_d: "-",
-                            score_a: "-",
-                            hero_img: "http://via.placeholder.com/127x71?text=Error",
-                            report_comm,
-                            report_abi,
-                            report_feed,
-                            commend_lead,
-                            commend_teach,
-                            commend_friend,
-                            commend_forgive,
-                        });
-                        return;
-                    }
-                    const hero_id = player.hero_id;
-                    const hero = heroes.heroes.filter((h) => h.id === hero_id)[0];
-                    if (!hero) {
-                        console.log(`Error retrieving hero data of ${match_id}: ${hero_id}`);
-                        // $tbody.append(`<tr><td colspan="3">Error retrieving hero data of ${match_id}</td></tr>`);
-                        create_row({
-                            match_id,
-                            date_string: date_string + "<br />Error Hero data not found",
-                            outcome: "",
-                            gamemode,
-                            duration,
-                            score_k: "-",
-                            score_d: "-",
-                            score_a: "-",
-                            hero_img: "http://via.placeholder.com/127x71?text=Error",
-                            report_comm,
-                            report_abi,
-                            report_feed,
-                            commend_lead,
-                            commend_teach,
-                            commend_friend,
-                            commend_forgive,
-                        });
-                        return;
-                    }
-                    const hero_name = hero.name;
-                    const hero_fullname = hero.localized_name;
-                    const hero_img = `http://cdn.dota2.com/apps/dota2/images/heroes/${hero_name}_hphover.png`;
-                    const score_k = player.kills;
-                    const score_d = player.deaths;
-                    const score_a = player.assists;
-                    const outcome = player.win;
-                    create_row({
-                        match_id,
+                    const {
                         date_string,
                         outcome,
                         gamemode,
@@ -601,6 +542,20 @@
                         score_d,
                         score_a,
                         hero_img,
+                    } = match_data;
+
+                    create_row({
+                        match_id,
+
+                        date_string,
+                        outcome,
+                        gamemode,
+                        duration,
+                        score_k,
+                        score_d,
+                        score_a,
+                        hero_img,
+
                         report_comm,
                         report_abi,
                         report_feed,
@@ -611,7 +566,7 @@
                     });
                 };
 
-                const cache = localStorage.getItem(`match-${match_id}`);
+                const cache = localStorage.getItem(`matchdata-${match_id}`);
                 if (cache) {
                     process_response(JSON.parse(cache));
                     if (i < data.length - 1) {
@@ -646,8 +601,84 @@
                             });
                             return;
                         }
-                        localStorage.setItem(`match-${match_id}`, JSON.stringify(response));
-                        process_response(response);
+                        const timestamp = response.start_time;
+                        const date_obj = new Date(timestamp * 1000);
+                        const date_string = date_obj.toLocaleString();
+
+                        const gamemode = formatGameMode(response.lobby_type, response.game_mode);
+                        const duration = formatDuration(response.duration);
+
+                        const players = response.players.filter((p) => p.personaname === name);
+                        const player = players.length > 0 ? players[0] : null;
+                        if (!player) {
+                            console.log(`Error retrieving player data of ${match_id}`);
+                            // $tbody.append(`<tr><td colspan="3">Error retrieving player data of ${match_id}</td></tr>`);
+                            create_row({
+                                match_id,
+                                date_string: date_string + "<br />Error Unable to identify your hero",
+                                outcome: "",
+                                gamemode,
+                                duration,
+                                score_k: "-",
+                                score_d: "-",
+                                score_a: "-",
+                                hero_img: "http://via.placeholder.com/127x71?text=Error",
+                                report_comm,
+                                report_abi,
+                                report_feed,
+                                commend_lead,
+                                commend_teach,
+                                commend_friend,
+                                commend_forgive,
+                            });
+                            return;
+                        }
+                        const hero_id = player.hero_id;
+                        const hero = heroes.heroes.filter((h) => h.id === hero_id)[0];
+                        if (!hero) {
+                            console.log(`Error retrieving hero data of ${match_id}: ${hero_id}`);
+                            // $tbody.append(`<tr><td colspan="3">Error retrieving hero data of ${match_id}</td></tr>`);
+                            create_row({
+                                match_id,
+                                date_string: date_string + "<br />Error Hero data not found",
+                                outcome: "",
+                                gamemode,
+                                duration,
+                                score_k: "-",
+                                score_d: "-",
+                                score_a: "-",
+                                hero_img: "http://via.placeholder.com/127x71?text=Error",
+                                report_comm,
+                                report_abi,
+                                report_feed,
+                                commend_lead,
+                                commend_teach,
+                                commend_friend,
+                                commend_forgive,
+                            });
+                            return;
+                        }
+                        const hero_name = hero.name;
+                        const hero_fullname = hero.localized_name;
+                        const hero_img = `http://cdn.dota2.com/apps/dota2/images/heroes/${hero_name}_hphover.png`;
+                        const score_k = player.kills;
+                        const score_d = player.deaths;
+                        const score_a = player.assists;
+                        const outcome = player.win;
+
+                        const match_data = {
+                            date_string,
+                            outcome,
+                            gamemode,
+                            duration,
+                            score_k,
+                            score_d,
+                            score_a,
+                            hero_img,
+                        };
+
+                        localStorage.setItem(`matchdata-${match_id}`, JSON.stringify(match_data));
+                        process_response(match_data);
 
                     }).fail(() => {
                         console.log(`Error retrieving ${match_id}`);
