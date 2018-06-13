@@ -6,7 +6,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120833732-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-120833732-1');
@@ -17,7 +21,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Illuminate</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script defer src="https://pro.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-d84LGg2pm9KhR4mCAs3N29GQ4OYNy+K+FBHX8WhimHpPm86c839++MDABegrZ3gn" crossorigin="anonymous"></script>
+    <script defer src="https://pro.fontawesome.com/releases/v5.0.13/js/all.js"
+            integrity="sha384-d84LGg2pm9KhR4mCAs3N29GQ4OYNy+K+FBHX8WhimHpPm86c839++MDABegrZ3gn"
+            crossorigin="anonymous"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/superhero/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-fiZOWGBt79dIbkt852eb24nKPxYOvAgtp4v4IUFozlwV/WkvlilK1oTVfPorZdV4" crossorigin="anonymous">
     <style>
@@ -129,7 +135,9 @@
                     target="_blank">https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming</a>
             </li>
             <li>
-                <div>In URL bar, Type <code>javascript:</code> and paste the following script afterward, then press Enter</div>
+                <div>In URL bar, Type <code>javascript:</code> and paste the following script afterward, then press
+                    Enter
+                </div>
                 <textarea id="script_box" class="form-control" readonly style="color: white;">(()=>{const a=()=>{const f=document.getElementsByClassName("profile_small_header_name")[0].children[0].textContent,g=document.getElementById("personaldata_elements_container").querySelectorAll("tr");let h=f+",";for(let k=1;k<g.length;k++){const l=g[k].querySelectorAll("td");let m="";for(let n=0;n<l.length;n++)m+=0===n?l[n].textContent+"-":"Yes"===l[n].textContent?"1":"0";h+=m+","}window.location="https://illuminate.dotasphere.com/#"+h},b=()=>"none"!==document.getElementById("load_more_button").style.display||"none"!==document.getElementById("inventory_history_loading").style.display,c=()=>"none"!==document.getElementById("load_more_button").style.display,d=()=>document.getElementById("load_more_button").click();(()=>{const f=setInterval(()=>{c()?d():!b()&&(clearInterval(f),console.log(`done`),a())},100)})()})()</textarea>
                 <div>If you're not comfortable using compressed script, visit <a
                         href="https://github.com/bongikairu/illuminate">https://github.com/bongikairu/illuminate</a> for
@@ -443,7 +451,7 @@
                     commend_forgive,
                 } = data;
 
-                const outcome_el =  outcome === "" ? "" : (outcome ? `<span class="win ml-3 font-weight-bold">WIN</span>` : `<span class="lose ml-3 font-weight-bold">LOSE</span>`);
+                const outcome_el = outcome === "" ? "" : (outcome ? `<span class="win ml-3 font-weight-bold">WIN</span>` : `<span class="lose ml-3 font-weight-bold">LOSE</span>`);
 
                 const col1 = (`<td class="match"><a href="https://www.opendota.com/matches/${match_id}" target="_blank">${match_id}</a> ${outcome_el}<br /><span class="gamemode">${gamemode}</span><span class="duration">${duration}</span><a class="opendota" href="https://www.opendota.com/matches/${match_id}">&lt;/&gt;</a> <a class="dotabuff" href="https://www.dotabuff.com/matches/${match_id}">D</a> <a class="stratz" href="https://stratz.com/en-us/match/${match_id}">⇑</a><br />${date_string}</td>`);
                 const col2 = (`<td class="icon pb-1"><img class="mb-1" src="${hero_img}" height="30"><br /><span class="score_k">${score_k}</span><span class="kda_spacer">/</span><span class="score_d">${score_d}</span><span class="kda_spacer">/</span><span class="score_a">${score_a}</span></td>`);
@@ -456,6 +464,36 @@
                 const col3 = (`<td>${summary}</td>`);
 
                 $tbody.append(`<tr>${col1}${col2}${col3}</tr>`);
+            };
+
+            const formatGameMode = (lobby, mode) => {
+                const lobby_list = {
+                    0: "Normal",
+                    1: "Practice",
+                    2: "Tournament",
+                    3: "Tutorial",
+                    4: "Co-op with bots",
+                    5: "Team match",
+                    6: "Solo Queue",
+                    7: "Ranked",
+                    8: "Solo Mid 1vs1"
+                };
+                return lobby_list[lobby] || "Unknown";
+            };
+
+            const formatDuration = (seconds) => {
+                let leftover = seconds;
+                let output = "";
+                if (leftover > 3600) {
+                    output += Math.floor(leftover / 3600) + ":";
+                    leftover = leftover % 3600;
+                }
+                let minute = Math.floor(leftover / 60);
+                let second = leftover % 60;
+                if (minute < 10) minute = `0${minute}`;
+                if (second < 10) seconds = `0${second}`;
+                output += `${minute}:${second}`;
+                return output;
             };
 
             const process = (row, i) => {
@@ -500,6 +538,9 @@
                     const date_obj = new Date(timestamp * 1000);
                     const date_string = date_obj.toLocaleString();
 
+                    const gamemode = formatGameMode(response.lobby_type, response.game_mode);
+                    const duration = formatDuration(response.duration);
+
                     const players = response.players.filter((p) => p.personaname === name);
                     const player = players.length > 0 ? players[0] : null;
                     if (!player) {
@@ -509,8 +550,8 @@
                             match_id,
                             date_string: date_string + "<br />Error Unable to identify your hero",
                             outcome: "",
-                            gamemode: "",
-                            duration: "",
+                            gamemode,
+                            duration,
                             score_k: "-",
                             score_d: "-",
                             score_a: "-",
@@ -534,8 +575,8 @@
                             match_id,
                             date_string: date_string + "<br />Error Hero data not found",
                             outcome: "",
-                            gamemode: "",
-                            duration: "",
+                            gamemode,
+                            duration,
                             score_k: "-",
                             score_d: "-",
                             score_a: "-",
@@ -561,8 +602,8 @@
                         match_id,
                         date_string,
                         outcome,
-                        gamemode: "",
-                        duration: "",
+                        gamemode,
+                        duration,
                         score_k,
                         score_d,
                         score_a,
