@@ -481,7 +481,7 @@
                 const mode_list = {
                     24: "Turbo",
                 };
-                return (lobby_list[lobby] || "Unknown") + (mode_list[mode] || "");
+                return (lobby_list[lobby] || "Unknown") + " " + (mode_list[mode] || "");
             };
 
             const formatDuration = (seconds) => {
@@ -494,7 +494,7 @@
                 let minute = Math.floor(leftover / 60);
                 let second = leftover % 60;
                 if (minute < 10) minute = `0${minute}`;
-                if (second < 10) seconds = `0${second}`;
+                if (second < 10) second = `0${second}`;
                 output += `${minute}:${second}`;
                 return output;
             };
