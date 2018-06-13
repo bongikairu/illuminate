@@ -28,7 +28,7 @@
           integrity="sha384-fiZOWGBt79dIbkt852eb24nKPxYOvAgtp4v4IUFozlwV/WkvlilK1oTVfPorZdV4" crossorigin="anonymous">
     <style>
         td.match {
-            width: 14em;
+            width: 16em;
         }
 
         td.icon {
@@ -451,10 +451,10 @@
                     commend_forgive,
                 } = data;
 
-                const outcome_el = outcome === "" ? "" : (outcome ? `<span class="win ml-3 font-weight-bold">WIN</span>` : `<span class="lose ml-3 font-weight-bold">LOSE</span>`);
+                const outcome_el = outcome === "" ? "" : (outcome ? `<span class="win ml-1 font-weight-bold">WIN</span>` : `<span class="lose ml-1 font-weight-bold">LOSE</span>`);
 
-                const col1 = (`<td class="match"><a href="https://www.opendota.com/matches/${match_id}" target="_blank">${match_id}</a> ${outcome_el}<br /><span class="gamemode mr-1">${gamemode}</span><span class="duration mr-1">${duration}</span><a class="opendota" href="https://www.opendota.com/matches/${match_id}">&lt;/&gt;</a> <a class="dotabuff" href="https://www.dotabuff.com/matches/${match_id}">D</a> <a class="stratz" href="https://stratz.com/en-us/match/${match_id}">⇑</a><br />${date_string}</td>`);
-                const col2 = (`<td class="icon pb-1"><img class="mb-1" src="${hero_img}" height="30"><br /><span class="score_k">${score_k}</span><span class="kda_spacer">/</span><span class="score_d">${score_d}</span><span class="kda_spacer">/</span><span class="score_a">${score_a}</span></td>`);
+                const col1 = (`<td class="match text-right"><a href="https://www.opendota.com/matches/${match_id}" target="_blank">${match_id}</a> ${outcome_el}<br /><span class="gamemode mr-1">${gamemode}</span><span class="duration mr-1">${duration}</span><a class="opendota" href="https://www.opendota.com/matches/${match_id}">&lt;/&gt;</a> <a class="dotabuff" href="https://www.dotabuff.com/matches/${match_id}">D</a> <a class="stratz" href="https://stratz.com/en-us/match/${match_id}">⇑</a><br />${date_string}</td>`);
+                const col2 = (`<td class="icon pb-1 text-center"><img class="mb-1 mt-1" src="${hero_img}" height="30"><br /><span class="score_k">${score_k}</span><span class="kda_spacer">/</span><span class="score_d">${score_d}</span><span class="kda_spacer">/</span><span class="score_a">${score_a}</span></td>`);
                 let summary_list = [];
                 if (report_comm) summary_list.push(`<span class="report"><i class="far fa-headphones"></i> Reported: Comm Abuse</span>`);
                 if (report_abi) summary_list.push(`<span class="report"><i class="far fa-magic"></i> Reported: Ability Abuse</span>`);
@@ -476,9 +476,12 @@
                     5: "Team match",
                     6: "Solo Queue",
                     7: "Ranked",
-                    8: "Solo Mid 1vs1"
+                    8: "Solo Mid 1vs1",
                 };
-                return lobby_list[lobby] || "Unknown";
+                const mode_list = {
+                    24: "Turbo",
+                };
+                return (lobby_list[lobby] || "Unknown") + (mode_list[mode] || "");
             };
 
             const formatDuration = (seconds) => {
