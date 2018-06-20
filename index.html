@@ -473,6 +473,7 @@
             "localized_name": "Dark Willow"
         }, {"name": "pangolier", "id": 120, "localized_name": "Pangolier"}]
     };
+    const heroes_map = heroes.heroes.reduce((prev, cur) => Object.assign({}, prev, {[cur.id]: cur}), {});
     $(() => {
 
         $("#script_box").click(() => {
@@ -784,8 +785,35 @@
                         const gamemode = formatGameMode(response.lobby_type, response.game_mode);
                         const duration = formatDuration(response.duration);
 
-                        const players = response.players.filter((p) => p.personaname === name);
-                        const player = players.length > 0 ? players[0] : null;
+                        let players = response.players.filter((p) => p.personaname === name);
+                        let player = players.length > 0 ? players[0] : null;
+                        while (!player) {
+                            let acc_id = localStorage.getItem(`account_id`);
+                            if (!acc_id) {
+                                console.log(response.players);
+                                const match_summary = response.players.map((p, i) => `${i + 1} = ${p.personaname || "Unknown"} (${heroes_map[p.hero_id].localized_name})`).join("\n");
+                                let idx = prompt(`Who are you in this match?\n\n${match_summary}\n\ntype in 0 to cancel`);
+                                try {
+                                    idx = parseInt(idx);
+                                } catch (e) {
+                                    idx = 10000;
+                                }
+                                if (idx === 0) {
+                                    break;
+                                }
+                                player = response.players[idx - 1];
+                                if (player) {
+                                    acc_id = player.account_id;
+                                    localStorage.setItem(`account_id`, acc_id);
+                                }
+                            } else {
+                                players = response.players.filter((p) => `${p.account_id}` === acc_id);
+                                player = players.length > 0 ? players[0] : null;
+                                if (!player) {
+                                    localStorage.setItem(`account_id`, "");
+                                }
+                            }
+                        }
                         if (!player) {
                             console.log(`Error retrieving player data of ${match_id}`);
                             // $tbody.append(`<tr><td colspan="3">Error retrieving player data of ${match_id}</td></tr>`);
@@ -810,7 +838,7 @@
                             return;
                         }
                         const hero_id = player.hero_id;
-                        const hero = heroes.heroes.filter((h) => h.id === hero_id)[0];
+                        const hero = heroes_map[hero_id]; // heroes.heroes.filter((h) => h.id === hero_id)[0];
                         if (!hero) {
                             console.log(`Error retrieving hero data of ${match_id}: ${hero_id}`);
                             // $tbody.append(`<tr><td colspan="3">Error retrieving hero data of ${match_id}</td></tr>`);
