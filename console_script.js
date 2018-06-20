@@ -2,12 +2,13 @@
     const read_data = () => {
         const player_name = document.getElementsByClassName("profile_small_header_name")[0].children[0].textContent;
         const row_list = document.getElementById("personaldata_elements_container").querySelectorAll("tr");
+        const yes_marks = ["Yes", "Да"];
         let all_output = player_name + ",";
         for (let i = 1; i < row_list.length; i++) {
             const col_list = row_list[i].querySelectorAll("td");
             let output = "";
             for (let j = 0; j < col_list.length; j++) {
-                output += (j === 0) ? col_list[j].textContent + "-" : (col_list[j].textContent === "Yes" ? "1" : "0");
+                output += (j === 0) ? col_list[j].textContent + "-" : (yes_marks.indexOf(col_list[j].textContent) !== -1 ? "1" : "0");
             }
             all_output += output + ","
         }
