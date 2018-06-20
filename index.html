@@ -488,25 +488,25 @@
             let style_text = ".match_row { display: none; } ";
             if (filter_commend && filter_report) {
                 if (filter_outcome === "win") {
-                    style_text += `.outcome_lose.data_commend.data_report { display: table-row; } `;
-                } else if (filter_outcome === "lose") {
                     style_text += `.outcome_win.data_commend.data_report { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_lose.data_commend.data_report { display: table-row; } `;
                 } else {
                     style_text += `.data_commend.data_report { display: table-row; } `;
                 }
             } else if (filter_commend) {
                 if (filter_outcome === "win") {
-                    style_text += `.outcome_lose.data_commend { display: table-row; } `;
-                } else if (filter_outcome === "lose") {
                     style_text += `.outcome_win.data_commend { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_lose.data_commend { display: table-row; } `;
                 } else {
                     style_text += `.data_commend { display: table-row; } `;
                 }
             } else if (filter_report) {
                 if (filter_outcome === "win") {
-                    style_text += `.outcome_lose.data_report { display: table-row; } `;
-                } else if (filter_outcome === "lose") {
                     style_text += `.outcome_win.data_report { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_lose.data_report { display: table-row; } `;
                 } else {
                     style_text += `.data_report { display: table-row; } `;
                 }
