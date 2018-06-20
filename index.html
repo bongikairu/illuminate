@@ -786,7 +786,7 @@
                         const duration = formatDuration(response.duration);
 
                         let players = response.players.filter((p) => p.personaname === name);
-                        let player = players.length > 0 ? players[0] : null;
+                        let player = players.length === 1 ? players[0] : null;
                         while (!player) {
                             let acc_id = localStorage.getItem(`account_id`);
                             if (!acc_id) {
@@ -808,7 +808,7 @@
                                 }
                             } else {
                                 players = response.players.filter((p) => `${p.account_id}` === acc_id);
-                                player = players.length > 0 ? players[0] : null;
+                                player = players.length === 1 ? players[0] : null;
                                 if (!player) {
                                     localStorage.setItem(`account_id`, "");
                                 }
