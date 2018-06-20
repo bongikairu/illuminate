@@ -485,33 +485,48 @@
 
         const regenerate_style = () => {
 
-            let style_text = "";
+            let style_text = ".match_row { display: none; } ";
             if (filter_commend && filter_report) {
-                style_text += `.data_commend { display: none; } `;
-                style_text += `.data_report { display: none; } `;
-                style_text += `.data_unknown { display: none; } `;
-                style_text += `.data_commend.data_report { display: table-row; } `;
+                if (filter_outcome === "win") {
+                    style_text += `.outcome_lose.data_commend.data_report { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_win.data_commend.data_report { display: table-row; } `;
+                } else {
+                    style_text += `.data_commend.data_report { display: table-row; } `;
+                }
             } else if (filter_commend) {
-                style_text += `.data_report { display: none; } `;
-                style_text += `.data_unknown { display: none; } `;
-                style_text += `.data_commend.data_report { display: table-row; } `;
+                if (filter_outcome === "win") {
+                    style_text += `.outcome_lose.data_commend { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_win.data_commend { display: table-row; } `;
+                } else {
+                    style_text += `.data_commend { display: table-row; } `;
+                }
             } else if (filter_report) {
-                style_text += `.data_commend { display: none; } `;
-                style_text += `.data_unknown { display: none; } `;
-                style_text += `.data_commend.data_report { display: table-row; } `;
+                if (filter_outcome === "win") {
+                    style_text += `.outcome_lose.data_report { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_win.data_report { display: table-row; } `;
+                } else {
+                    style_text += `.data_report { display: table-row; } `;
+                }
+            } else {
+                if (filter_outcome === "win") {
+                    style_text += `.outcome_win { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_lose { display: table-row; } `;
+                } else {
+                    style_text += `.data_unknown { display: table-row; } `;
+                    style_text += `.outcome_unknown { display: table-row; } `;
+                }
             }
 
-            if (filter_outcome === "win") {
-                style_text += `.outcome_unknown { display: none; } `;
-                style_text += `.outcome_lose { display: none; } `;
-            } else if (filter_outcome === "lose") {
-                style_text += `.outcome_unknown { display: none; } `;
-                style_text += `.outcome_win { display: none; } `;
-            }
+
 
             console.log(style_text);
             $("#filter_style").text(style_text);
         };
+        regenerate_style();
 
         $("#filter_commend").click(function () {
             const val = $(this).is(':checked');
@@ -622,7 +637,7 @@
                     last_row_elem.addClass(class1);
                     last_row_elem.addClass(class2);
                 } else {
-                    const $tr = $(`<tr class="${class1} ${class2}"></tr>`);
+                    const $tr = $(`<tr class="match_row ${class1} ${class2}"></tr>`);
                     const $col1 = $(col1);
                     const $col2 = $(col2);
                     const $col3 = $(col3);
