@@ -27,6 +27,15 @@
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/superhero/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-fiZOWGBt79dIbkt852eb24nKPxYOvAgtp4v4IUFozlwV/WkvlilK1oTVfPorZdV4" crossorigin="anonymous">
     <style>
+        body {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        #filter_title {
+            margin-top: 4px;
+        }
+
         td.match {
             width: 16em;
         }
@@ -99,9 +108,21 @@
             margin-right: 0.3em;
         }
 
+        td.summary {
+            padding-bottom: 2rem;
+        }
+
+        .summary hr {
+            margin: 0.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         #rip {
             font-size: 0.3em;
         }
+
+    </style>
+    <style id="filter_style">
 
     </style>
 </head>
@@ -118,7 +139,34 @@
     <div id="output" style="display: none" class="mt-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title" id="output_title"></h5>
+                <div class="card-title float-left" id="output_title"></div>
+                <div class="float-right">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary">
+                            <input type="checkbox" autocomplete="off" id="filter_commend"> Commended
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="checkbox" autocomplete="off" id="filter_report"> Reported
+                        </label>
+                    </div>
+                </div>
+                <div class="float-right mr-3">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="filter_outcome" autocomplete="off" checked
+                                   id="filter_outcome_all" value="all"> All
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="filter_outcome" autocomplete="off" id="filter_outcome_win"
+                                   value="win"> Win
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="filter_outcome" autocomplete="off" id="filter_outcome_lose"
+                                   value="lose"> Lose
+                        </label>
+                    </div>
+                </div>
+                <h5 id="filter_title" class="card-title float-right mr-3">Filter: </h5>
                 <p class="card-text" id="output_data">
 
                 </p>
@@ -150,7 +198,7 @@
                 <div>In URL bar, Type <code>javascript:</code> and paste the following script afterward, then press
                     Enter
                 </div>
-                <textarea id="script_box" class="form-control" readonly style="color: white;">(()=>{const a=()=>{const h=document.getElementsByClassName("profile_small_header_name")[0].children[0].textContent,k=document.getElementById("personaldata_elements_container").querySelectorAll("tr");let l=h+",";for(let m=1;m<k.length;m++){const n=k[m].querySelectorAll("td");let o="";for(let p=0;p<n.length;p++)o+=0===p?n[p].textContent+"-":"Yes"===n[p].textContent?"1":"0";l+=o+","}window.location="https://illuminate.dotasphere.com/#"+l},b=document.getElementById("load_more_button"),c=document.getElementById("inventory_history_loading"),d=()=>{return b&&"none"!==b.style.display||c&&"none"!==c.style.display},e=()=>b&&"none"!==b.style.display,f=()=>b.click();(()=>{const h=setInterval(()=>{e()?f():!d()&&(clearInterval(h),console.log(`done`),a())},100)})()})()</textarea>
+                <textarea id="script_box" class="form-control" readonly style="color: white;">(()=>{const a=()=>{const n=document.getElementsByClassName("profile_small_header_name")[0].children[0].textContent,o=document.getElementById("personaldata_elements_container").querySelectorAll("tr"),p=["Yes","\u0414\u0430","Ano","Ja","Kyll\xE4","Oui","\u039D\u03B1\u03B9","Igen","S\xEC","\u306F\u3044","\uC608","Tak","Sim","Da","\u662F","S\xED","\u0E43\u0E0A\u0E48","Evet","\u0422\u0430\u043A"];let q=n+",";for(let r=1;r<o.length;r++){const s=o[r].querySelectorAll("td");let t="";for(let u=0;u<s.length;u++)t+=0===u?s[u].textContent+"-":-1===p.indexOf(s[u].textContent)?"0":"1";q+=t+","}window.location="https://illuminate.dotasphere.com/#"+q},b=document.getElementById("load_more_button"),c=document.getElementById("inventory_history_loading"),d=()=>{return b&&"none"!==b.style.display||c&&"none"!==c.style.display},e=()=>b&&"none"!==b.style.display,f=()=>b.click(),h=document.getElementById("personaldata_elements_container"),k=document.createElement("h1"),l=document.createTextNode("Loading more data "),m=document.createElement("img");m.src="https://steamcommunity-a.akamaihd.net/public/images/login/throbber.gif",k.appendChild(l),k.appendChild(m),h.insertBefore(k,h.childNodes[0]),(()=>{const n=setInterval(()=>{e()?f():!d()&&(clearInterval(n),console.log(`done`),a())},100)})()})()</textarea>
                 <div>If you're not comfortable using compressed script, visit <a
                         href="https://github.com/bongikairu/illuminate">https://github.com/bongikairu/illuminate</a> for
                     full version
@@ -431,6 +479,68 @@
             $("#script_box").select();
         });
 
+        let filter_outcome = "all";
+        let filter_commend = false;
+        let filter_report = false;
+
+        const regenerate_style = () => {
+
+            let style_text = "";
+            if (filter_commend && filter_report) {
+                style_text += `.data_commend { display: none; } `;
+                style_text += `.data_report { display: none; } `;
+                style_text += `.data_unknown { display: none; } `;
+                style_text += `.data_commend.data_report { display: table-row; } `;
+            } else if (filter_commend) {
+                style_text += `.data_report { display: none; } `;
+                style_text += `.data_unknown { display: none; } `;
+                style_text += `.data_commend.data_report { display: table-row; } `;
+            } else if (filter_report) {
+                style_text += `.data_commend { display: none; } `;
+                style_text += `.data_unknown { display: none; } `;
+                style_text += `.data_commend.data_report { display: table-row; } `;
+            }
+
+            if (filter_outcome === "win") {
+                style_text += `.outcome_unknown { display: none; } `;
+                style_text += `.outcome_lose { display: none; } `;
+            } else if (filter_outcome === "lose") {
+                style_text += `.outcome_unknown { display: none; } `;
+                style_text += `.outcome_win { display: none; } `;
+            }
+
+            console.log(style_text);
+            $("#filter_style").text(style_text);
+        };
+
+        $("#filter_commend").click(function () {
+            const val = $(this).is(':checked');
+            filter_commend = val;
+            if (val) {
+                $(this).parent().addClass("active");
+            } else {
+                $(this).parent().removeClass("active");
+            }
+            regenerate_style();
+        });
+        $("#filter_report").click(function () {
+            const val = $(this).is(':checked');
+            filter_report = val;
+            if (val) {
+                $(this).parent().addClass("active");
+            } else {
+                $(this).parent().removeClass("active");
+            }
+            regenerate_style();
+        });
+        $("input[name=filter_outcome]").click(function () {
+            const val = $(this).val();
+            filter_outcome = val;
+            $(this).parent().parent().children().removeClass("active");
+            $(this).parent().addClass("active");
+            regenerate_style();
+        });
+
         // clear broken data
         for (let key in localStorage) {
             if (key.startsWith("match-")) localStorage.removeItem(key);
@@ -452,6 +562,10 @@
 
             // const $loading = $(`<div id="loading">Loading ...</div>`);
             // $("#output_data").append($loading);
+
+            let last_row_id = "";
+            let last_row_elem = null;
+            let last_row_summary = null;
 
             const create_row = (data) => {
                 const {
@@ -482,10 +596,45 @@
                 if (report_abi) summary_list.push(`<span class="report"><i class="far fa-magic"></i> Reported: Ability Abuse</span>`);
                 if (report_feed) summary_list.push(`<span class="report"><i class="far fa-utensils"></i> Reported: Intentional Feeding</span>`);
                 if (commend_teach || commend_lead || commend_friend || commend_forgive) summary_list.push(`<span class="commend"><i class="far fa-thumbs-up"></i> Commended</span>`);
-                let summary = summary_list.join("<br />");
-                const col3 = (`<td>${summary}</td>`);
 
-                $tbody.append(`<tr>${col1}${col2}${col3}</tr>`);
+                let summary = summary_list.join("<br />");
+                const col3 = (`<td class="summary">${summary}</td>`);
+
+                if (outcome === "") {
+                    class1 = "outcome_unknown";
+                } else if (outcome) {
+                    class1 = "outcome_win";
+                } else {
+                    class1 = "outcome_lose";
+                }
+
+                if (report_comm || report_abi || report_feed) {
+                    class2 = "data_report";
+                } else if (commend_teach || commend_lead || commend_friend || commend_forgive) {
+                    class2 = "data_commend";
+                } else {
+                    class2 = "data_unknown"
+                }
+
+                if (last_row_id === match_id) {
+                    last_row_summary.append("<hr />");
+                    last_row_summary.append(summary);
+                    last_row_elem.addClass(class1);
+                    last_row_elem.addClass(class2);
+                } else {
+                    const $tr = $(`<tr class="${class1} ${class2}"></tr>`);
+                    const $col1 = $(col1);
+                    const $col2 = $(col2);
+                    const $col3 = $(col3);
+                    $tr.append($col1);
+                    $tr.append($col2);
+                    $tr.append($col3);
+                    last_row_id = match_id;
+                    last_row_elem = $tr;
+                    last_row_summary = $col3;
+                    $tbody.append($tr);
+                }
+
             };
 
             const formatGameMode = (lobby, mode) => {
