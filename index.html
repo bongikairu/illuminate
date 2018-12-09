@@ -804,7 +804,6 @@
             $output.show();
             const raw_data = location.hash.substring(1);
             const data = raw_data.split(",");
-            console.log(data);
             const name = decodeURI(data[0]);
             $("#output_title").append(`<h2>${name}'s reported data</h2>`);
             const $table = $(`<table class="table table-striped table-sm"></table>`);
@@ -934,7 +933,6 @@
                     }
                     return;
                 }
-                console.log(row);
                 const parsed_row = [row.split("-")[0], ...row.split("-")[1].split("")];
                 const match_id = parsed_row[0];
                 const report_comm = parsed_row[2] === "1";
