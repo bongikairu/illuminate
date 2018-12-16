@@ -21,9 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Illuminate</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script defer src="https://pro.fontawesome.com/releases/v5.0.13/js/all.js"
-            integrity="sha384-d84LGg2pm9KhR4mCAs3N29GQ4OYNy+K+FBHX8WhimHpPm86c839++MDABegrZ3gn"
-            crossorigin="anonymous"></script>
+    <script defer src="https://pro.fontawesome.com/releases/v5.6.1/js/all.js" integrity="sha384-ncMWtRMSOo+cLmfdaa6vmMGzBJKysBDF9tq5YK1MAnAjcyipdW2vgTS1jOntY4fs" crossorigin="anonymous"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/superhero/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-fiZOWGBt79dIbkt852eb24nKPxYOvAgtp4v4IUFozlwV/WkvlilK1oTVfPorZdV4" crossorigin="anonymous">
     <style>
@@ -847,7 +845,8 @@
                 if (report_abi) summary_list.push(`<span class="report"><i class="far fa-magic"></i> Reported: Ability Abuse</span>`);
                 if (report_feed) summary_list.push(`<span class="report"><i class="far fa-utensils"></i> Reported: Intentional Feeding</span>`);
                 if (commend_teach || commend_lead || commend_friend || commend_forgive) summary_list.push(`<span class="commend"><i class="far fa-thumbs-up"></i> Commended</span>`);
-
+                if (!report_comm && !report_abi && !report_feed && !commend_teach && !commend_lead && !commend_friend && !commend_forgive) summary_list.push(`<span class="report"><i class="far fa-id-badge"></i> Reported: Did Not Played Selected Role</span>`);
+                
                 let summary = summary_list.join("<br />");
                 const col3 = (`<td class="summary">${summary}</td>`);
 
