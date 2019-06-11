@@ -845,7 +845,7 @@
                 if (report_abi) summary_list.push(`<span class="report"><i class="far fa-magic"></i> Reported: Ability Abuse</span>`);
                 if (report_feed) summary_list.push(`<span class="report"><i class="far fa-utensils"></i> Reported: Intentional Feeding</span>`);
                 if (commend_teach || commend_lead || commend_friend || commend_forgive) summary_list.push(`<span class="commend"><i class="far fa-thumbs-up"></i> Commended</span>`);
-                if (!report_comm && !report_abi && !report_feed && !commend_teach && !commend_lead && !commend_friend && !commend_forgive) summary_list.push(`<span class="report"><i class="far fa-id-badge"></i> Reported: Did Not Played Selected Role</span>`);
+                if (!report_comm && !report_abi && !report_feed && !commend_teach && !commend_lead && !commend_friend && !commend_forgive) summary_list.push(`<span class="report"><i class="far fa-id-badge"></i> Blocked By Another Player</span>`);
                 
                 let summary = summary_list.join("<br />");
                 const col3 = (`<td class="summary">${summary}</td>`);
