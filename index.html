@@ -30,6 +30,14 @@
             margin-bottom: 1rem;
         }
 
+        #logo {
+            float: left;
+            margin-right: 1rem;
+            height: 94px;
+            border-radius: 1rem;
+            border: 3px solid floralwhite;
+        }
+
         #filter_title {
             margin-top: 4px;
         }
@@ -47,7 +55,8 @@
         }
 
         .card {
-            background: #1c2127;
+            /* Background pattern from Toptal Subtle Patterns https://www.toptal.com/designers/subtlepatterns/blach-orchid/ */
+            background: #1c2127 url(blackorchid.png) repeat;
         }
 
         a.opendota {
@@ -129,8 +138,11 @@
 
 <div class="container">
 
-    <h1>Illuminate</h1>
-    <h2>Automatic Dota 2 Reported Match Data Linker</h2>
+    <img id="logo" src="http://cdn.dota2.com/apps/dota2/images/abilities/keeper_of_the_light_illuminate_hp2.png" alt="Illuminate Logo"/>
+    <div>
+        <h1>DOTA 2 Illuminate</h1>
+        <h2>See which games you get reported</h2>
+    </div>
 
     <hr/>
 
@@ -185,28 +197,32 @@
     </div>
 
     <div id="instruction" class="mt-3 hideondata">
-        <h3>How to use</h3>
-        <ol>
-            <li>
-                Open link <a
-                    href="https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming"
-                    target="_blank">https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming</a>
-            </li>
-            <li>
-                <div>In URL bar, Type <code>javascript:</code> and paste the following script afterward, then press
-                    Enter
-                </div>
-                <textarea id="script_box" class="form-control" readonly style="color: white;">(()=>{const a=()=>{const n=document.getElementsByClassName("profile_small_header_name")[0].children[0].textContent,o=document.getElementById("personaldata_elements_container").querySelectorAll("tr"),p=["Yes","\u0414\u0430","Ano","Ja","Kyll\xE4","Oui","\u039D\u03B1\u03B9","Igen","S\xEC","\u306F\u3044","\uC608","Tak","Sim","Da","\u662F","S\xED","\u0E43\u0E0A\u0E48","Evet","\u0422\u0430\u043A"];let q=n+",";for(let r=1;r<o.length;r++){const s=o[r].querySelectorAll("td");let t="";for(let u=0;u<s.length;u++)t+=0===u?s[u].textContent+"-":-1===p.indexOf(s[u].textContent)?"0":"1";q+=t+","}window.location="https://illuminate.dotasphere.com/#"+q},b=document.getElementById("load_more_button"),c=document.getElementById("inventory_history_loading"),d=()=>{return b&&"none"!==b.style.display||c&&"none"!==c.style.display},e=()=>b&&"none"!==b.style.display,f=()=>b.click(),h=document.getElementById("personaldata_elements_container"),k=document.createElement("h1"),l=document.createTextNode("Loading more data "),m=document.createElement("img");m.src="https://steamcommunity-a.akamaihd.net/public/images/login/throbber.gif",k.appendChild(l),k.appendChild(m),h.insertBefore(k,h.childNodes[0]),(()=>{const n=setInterval(()=>{e()?f():!d()&&(clearInterval(n),console.log(`done`),a())},100)})()})()</textarea>
-                <div>If you're not comfortable using compressed script, visit <a
-                        href="https://github.com/bongikairu/illuminate">https://github.com/bongikairu/illuminate</a> for
-                    full version
-                </div>
-            </li>
-            <li>
-                Wait until data is loaded, that's all
-            </li>
-        </ol>
-        <span class="text-warning">Note: Script currently working on chrome and english steam site. You might get an error using other browser, or blank report/commend if not using english version of steam.</span>
+        <div class="card">
+            <div class="card-body">
+                <h3>How to use</h3>
+                <ol>
+                    <li>
+                        Open link <a
+                            href="https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming"
+                            target="_blank">https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming</a>
+                    </li>
+                    <li>
+                        <div>In URL bar, Type <code>javascript:</code> and paste the following script afterward, then press
+                            Enter
+                        </div>
+                        <textarea id="script_box" class="form-control" readonly style="color: white;">(()=>{const a=()=>{const n=document.getElementsByClassName("profile_small_header_name")[0].children[0].textContent,o=document.getElementById("personaldata_elements_container").querySelectorAll("tr"),p=["Yes","\u0414\u0430","Ano","Ja","Kyll\xE4","Oui","\u039D\u03B1\u03B9","Igen","S\xEC","\u306F\u3044","\uC608","Tak","Sim","Da","\u662F","S\xED","\u0E43\u0E0A\u0E48","Evet","\u0422\u0430\u043A"];let q=n+",";for(let r=1;r<o.length;r++){const s=o[r].querySelectorAll("td");let t="";for(let u=0;u<s.length;u++)t+=0===u?s[u].textContent+"-":-1===p.indexOf(s[u].textContent)?"0":"1";q+=t+","}window.location="https://illuminate.dotasphere.com/#"+q},b=document.getElementById("load_more_button"),c=document.getElementById("inventory_history_loading"),d=()=>{return b&&"none"!==b.style.display||c&&"none"!==c.style.display},e=()=>b&&"none"!==b.style.display,f=()=>b.click(),h=document.getElementById("personaldata_elements_container"),k=document.createElement("h1"),l=document.createTextNode("Loading more data "),m=document.createElement("img");m.src="https://steamcommunity-a.akamaihd.net/public/images/login/throbber.gif",k.appendChild(l),k.appendChild(m),h.insertBefore(k,h.childNodes[0]),(()=>{const n=setInterval(()=>{e()?f():!d()&&(clearInterval(n),console.log(`done`),a())},100)})()})()</textarea>
+                        <div>If you're not comfortable using compressed script, visit <a
+                                href="https://github.com/bongikairu/illuminate">https://github.com/bongikairu/illuminate</a> for
+                            full version
+                        </div>
+                    </li>
+                    <li>
+                        Wait until data is loaded, that's all
+                    </li>
+                </ol>
+                <span class="text-warning">Note: Script currently only working on chrome. You might get an error using other browser.</span>
+            </div>
+        </div>
     </div>
 
     <div class="mt-3">
@@ -227,11 +243,10 @@
     <hr/>
 
     <div class="mt-3 text-center text-muted">
-
+        <div>Illuminate - Automatic Dota 2 Reported Match Data Linker</div>
         <div>by <a href="https://github.com/bongikairu">@bongikairu</a></div>
         <div>Powered by <a href="https://docs.opendota.com/">OpenDota API</a></div>
         <div id="rip">RIP yearbeast and d2armory</div>
-
     </div>
 
 </div>
@@ -706,6 +721,10 @@
                 "name": "grimstroke",
                 "id": 121,
                 "localized_name": "Grimstroke"
+            }, {
+                "name": "mars",
+                "id": 129,
+                "localized_name": "Mars"
             }
         ]
     };
@@ -845,8 +864,15 @@
                 if (report_abi) summary_list.push(`<span class="report"><i class="far fa-magic"></i> Reported: Ability Abuse</span>`);
                 if (report_feed) summary_list.push(`<span class="report"><i class="far fa-utensils"></i> Reported: Intentional Feeding</span>`);
                 if (commend_teach || commend_lead || commend_friend || commend_forgive) summary_list.push(`<span class="commend"><i class="far fa-thumbs-up"></i> Commended</span>`);
-                if (!report_comm && !report_abi && !report_feed && !commend_teach && !commend_lead && !commend_friend && !commend_forgive) summary_list.push(`<span class="report"><i class="far fa-id-badge"></i> Blocked By Another Player</span>`);
-                
+                if (!report_comm && !report_abi && !report_feed && !commend_teach && !commend_lead && !commend_friend && !commend_forgive) {
+                    if (Date.parse(date_string) / 1000 >= 1557187200) {
+                        // Battlepass 2019 removed rank role report and changed to block (released 2019-05-07)
+                        summary_list.push(`<span class="report"><i class="far fa-id-badge"></i> Blocked By Another Player</span>`);
+                    } else {
+                        summary_list.push(`<span class="report"><i class="far fa-id-badge"></i> Reported: Did Not Play Selected Role</span>`);
+                    }
+                }
+
                 let summary = summary_list.join("<br />");
                 const col3 = (`<td class="summary">${summary}</td>`);
 
@@ -1144,7 +1170,7 @@
                         if (i < data.length - 1) {
                             setTimeout(() => {
                                 process(data[i + 1], i + 1);
-                            }, 5000); // throttle to 1 request/sec
+                            }, 1000); // throttle to 1 request/sec
                         } else {
                             $("#loading").hide();
                         }
