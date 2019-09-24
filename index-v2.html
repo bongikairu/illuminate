@@ -669,7 +669,7 @@
     const work_queue = [];
 
     const worker_process = () => {
-        console.log("Worker ", work_queue);
+        // console.log("Worker ", work_queue);
         if (work_queue.length === 0) {
             setTimeout(worker_process, 100);
         } else {
@@ -1049,9 +1049,10 @@
 
         let matches = [];
         records.filter(row => !!row).forEach(row => {
-            if (row.length > 0) {
-                if (matches[row.length - 1].match_id === row.match_id) {
-                    matches[row.length - 1].records.push(row);
+            if (matches.length > 0) {
+                if (matches[matches.length - 1].match_id === row.match_id) {
+                    matches[matches.length - 1].records.push(row);
+                    return;
                 }
             }
             matches.push({
