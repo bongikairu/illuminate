@@ -819,63 +819,65 @@
 
         useEffect(() => {
             const response = apiData;
-            if (response && !response.error) {
-                const timestamp = response.start_time;
-                const date_obj = new Date(timestamp * 1000);
-                const date_string = date_obj.toLocaleString();
+            if (response) {
+                if (!response.error) {
+                    const timestamp = response.start_time;
+                    const date_obj = new Date(timestamp * 1000);
+                    const date_string = date_obj.toLocaleString();
 
-                const gamemode = formatGameMode(response.lobby_type, response.game_mode);
-                const duration = formatDuration(response.duration);
+                    const gamemode = formatGameMode(response.lobby_type, response.game_mode);
+                    const duration = formatDuration(response.duration);
 
-                let players = response.players.filter((p) => nameList.indexOf(p.personaname) >= 0);
-                let player = players.length === 1 ? players[0] : null;
+                    let players = response.players.filter((p) => nameList.indexOf(p.personaname) >= 0);
+                    let player = players.length === 1 ? players[0] : null;
 
-                if (player) {
-                    const hero_id = player.hero_id;
-                    const hero_img = getHeroImageUrl(hero_id);
-                    const score_k = player.kills;
-                    const score_d = player.deaths;
-                    const score_a = player.assists;
-                    const outcome = player.win;
-                    setGameData({
-                        date_string,
-                        outcome,
-                        gamemode,
-                        duration,
-                        score_k,
-                        score_d,
-                        score_a,
-                        hero_img,
-                        player: player,
-                        data: apiData,
-                    })
+                    if (player) {
+                        const hero_id = player.hero_id;
+                        const hero_img = getHeroImageUrl(hero_id);
+                        const score_k = player.kills;
+                        const score_d = player.deaths;
+                        const score_a = player.assists;
+                        const outcome = player.win;
+                        setGameData({
+                            date_string,
+                            outcome,
+                            gamemode,
+                            duration,
+                            score_k,
+                            score_d,
+                            score_a,
+                            hero_img,
+                            player: player,
+                            data: apiData,
+                        })
+                    } else {
+                        setGameData({
+                            date_string,
+                            outcome: "",
+                            gamemode,
+                            duration,
+                            score_k: "-",
+                            score_d: "-",
+                            score_a: "-",
+                            hero_img: "http://via.placeholder.com/127x71?text=%3F%3F",
+                            player: null,
+                            data: apiData,
+                        })
+                    }
                 } else {
                     setGameData({
-                        date_string,
+                        date_string: "Error OpenDota match not found",
                         outcome: "",
-                        gamemode,
-                        duration,
+                        gamemode: "",
+                        duration: "",
                         score_k: "-",
                         score_d: "-",
                         score_a: "-",
-                        hero_img: "http://via.placeholder.com/127x71?text=%3F%3F",
-                        player: null,
-                        data: apiData,
+                        hero_img: "http://via.placeholder.com/127x71?text=404",
+                        player: -1,
+                        data: null,
                     })
                 }
-            } else if (response && response.error) {
-                setGameData({
-                    date_string: "Error OpenDota match not found",
-                    outcome: "",
-                    gamemode: "",
-                    duration: "",
-                    score_k: "-",
-                    score_d: "-",
-                    score_a: "-",
-                    hero_img: "http://via.placeholder.com/127x71?text=404",
-                    player: -1,
-                    data: null,
-                })
             } else if (response === false) {
                 setGameData({
                     date_string: "Loading...",
