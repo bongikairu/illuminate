@@ -20,6 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.9.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -677,26 +678,34 @@
         } else {
             const work = work_queue[0];
             work_queue.shift();
-            const cache = localStorage.getItem(`matchdata-r-${work.match_id}`);
+
+            const cache = localStorage.getItem(`fullmatchdata-${work.match_id}`);
             if (cache) {
-                const data = JSON.parse(cache);
+                const data = JSON.parse(LZString.decompress(cache));
                 work.resolve(data);
                 setTimeout(worker_process, 100);
-            } else {
-                fetchOpenAPI(work.match_id)
-                    .then((data) => {
-                        if (!data.error) {
-                            localStorage.setItem(`matchdata-r-${work.match_id}`, JSON.stringify(data));
-                        }
-                        work.resolve(data)
-                    })
-                    .catch(() => {
-                        work.reject(null);
-                    })
-                    .finally(() => {
-                        setTimeout(worker_process, 1000);
-                    })
+                return;
             }
+            fetchOpenAPI(work.match_id)
+                .then((data) => {
+                    if (!data.error) {
+                        try {
+                            localStorage.setItem(`fullmatchdata-${work.match_id}`, LZString.compress(JSON.stringify(data)));
+                        } catch (e) {
+                            console.log(`Can't save data for match ${work.match_id}`, e)
+                            // quota exceed
+                        }
+                    }
+                    work.resolve(data)
+                })
+                .catch((e) => {
+                    console.log(e);
+                    work.reject(null);
+                })
+                .finally(() => {
+                    setTimeout(worker_process, 1000);
+                })
+
         }
     };
 
@@ -799,7 +808,8 @@
         useEffect(() => {
             getGameData(match_id).then((response) => {
                 setApiData(response);
-            }).catch(() => {
+            }).catch((e) => {
+                console.log(e);
                 setApiData(null);
             })
         }, [match_id]);
@@ -961,7 +971,7 @@
         return (
             <tr className={"match_row " + (is_hidden ? "hidden" : "")}>
                 <td className="match text-right">
-                    <a href="https://www.opendota.com/matches/${match_id}" target="_blank">{match_id}</a>
+                    <a href={`https://www.opendota.com/matches/${match_id}`} target="_blank">{match_id}</a>
                     {" "}
                     {outcome !== "" && !!outcome ? (
                         <span className="win ml-1 font-weight-bold">WIN</span>
@@ -1239,7 +1249,7 @@
     // Init script
 
     for (let key in localStorage) {
-        if (key.startsWith("match-")) localStorage.removeItem(key);
+        if (key.startsWith("match-") || key.startsWith("matchdata-")) localStorage.removeItem(key);
     }
 
     ReactDOM.render(
