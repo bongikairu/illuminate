@@ -36,11 +36,10 @@
             if (col_list.length === 0) continue;
             // Build row output from {match id}-{indicator}-{timestamp}
             let output = "";
-            output += col_list[0].textContent + "-0";   // extra 0 for backward compatibility
+            output += col_list[0].textContent + "-" + col_list[1].textContent + "-";
             for (let j = 2; j < col_list.length; j++) {
                 output += yes_marks.indexOf(col_list[j].textContent) !== -1 ? "1" : "0";
             }
-            output += "-" + col_list[1].textContent;    // timestamp after data for backward compatibility
             all_output += output + ","
         }
         // Redirect user to illuminate to have this output data shown in better format
