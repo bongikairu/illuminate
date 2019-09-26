@@ -1,0 +1,1185 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120833732-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'UA-120833732-1');
+    </script>
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Illuminate</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script defer src="https://pro.fontawesome.com/releases/v5.6.1/js/all.js" integrity="sha384-ncMWtRMSOo+cLmfdaa6vmMGzBJKysBDF9tq5YK1MAnAjcyipdW2vgTS1jOntY4fs" crossorigin="anonymous"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/superhero/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-fiZOWGBt79dIbkt852eb24nKPxYOvAgtp4v4IUFozlwV/WkvlilK1oTVfPorZdV4" crossorigin="anonymous">
+    <style>
+        body {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        #logo {
+            float: left;
+            margin-right: 1rem;
+            height: 94px;
+            border-radius: 1rem;
+            border: 3px solid floralwhite;
+        }
+
+        #filter_title {
+            margin-top: 4px;
+        }
+
+        td.match {
+            width: 16em;
+        }
+
+        td.icon {
+            width: 7em;
+        }
+
+        .table th, .table td {
+            border-top: 1px solid #dee2e642;
+        }
+
+        .card {
+            /* Background pattern from Toptal Subtle Patterns https://www.toptal.com/designers/subtlepatterns/blach-orchid/ */
+            background: #1c2127 url(blackorchid.png) repeat;
+        }
+
+        a.opendota {
+            text-decoration: none !important;
+            font-weight: bolder;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Droid Sans", Ubuntu, Cantarell, "Fira Sans", Helvetica, Arial, sans-serif;
+        }
+
+        a.dotabuff {
+            text-decoration: none !important;
+            background: red;
+            font-weight: bold;
+            padding: 0 2px;
+        }
+
+        a.stratz {
+            text-decoration: none !important;
+            font-weight: bold;
+            padding: 0 2px;
+            color: #78DAEB;
+        }
+
+        .win {
+            color: #5cb85c;
+        }
+
+        .lose {
+            color: #d9534f;
+        }
+
+        .score_k {
+            color: #5cb85c;
+        }
+
+        .score_d {
+            color: #d9534f;
+        }
+
+        .score_a {
+            color: #f0ad4e;
+        }
+
+        .kda_spacer {
+            margin: 0 4px;
+        }
+
+        .commend {
+            color: #5cb85c;
+        }
+
+        .report {
+            color: #d9534f;
+        }
+
+        .commend .svg-inline--fa, .report .svg-inline--fa {
+            margin-right: 0.3em;
+        }
+
+        td.summary {
+            padding-bottom: 2rem;
+        }
+
+        .summary hr {
+            margin: 0.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #rip {
+            font-size: 0.3em;
+        }
+
+    </style>
+    <style id="filter_style">
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <img id="logo" src="http://cdn.dota2.com/apps/dota2/images/abilities/keeper_of_the_light_illuminate_hp2.png" alt="Illuminate Logo"/>
+    <div>
+        <h1>DOTA 2 Illuminate</h1>
+        <h2>See which games you get reported</h2>
+    </div>
+
+    <hr/>
+
+    <div id="output" style="display: none" class="mt-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title float-left" id="output_title"></div>
+                <div class="float-right">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary">
+                            <input type="checkbox" autocomplete="off" id="filter_commend"> Commended
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="checkbox" autocomplete="off" id="filter_report"> Reported
+                        </label>
+                    </div>
+                </div>
+                <div class="float-right mr-3">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="filter_outcome" autocomplete="off" checked
+                                   id="filter_outcome_all" value="all"> All
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="filter_outcome" autocomplete="off" id="filter_outcome_win"
+                                   value="win"> Win
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="filter_outcome" autocomplete="off" id="filter_outcome_lose"
+                                   value="lose"> Lose
+                        </label>
+                    </div>
+                </div>
+                <h5 id="filter_title" class="card-title float-right mr-3">Filter: </h5>
+                <p class="card-text" id="output_data">
+
+                </p>
+            </div>
+            <div id="loading" class="card-footer">
+                <i class="far fa-spinner fa-spin"></i> Loading ...
+            </div>
+        </div>
+    </div>
+
+    <div id="whatis" class="hideondata">
+        <h3>What is this?</h3>
+        Illuminate is a tool that help you browse through a newly revealed report/commendation
+        data that valve exposed due to EU GDPR regulation. Data in its raw form is not hard to read
+        but might be tiresome to go through. Illuminate fill that gap by automatically fetching matches
+        data for you. This tool is powered mainly by OpenDota API and did everything client-side. That
+        means no data is event transferred to us and is only yours to see.
+    </div>
+
+    <div id="instruction" class="mt-3 hideondata">
+        <div class="card">
+            <div class="card-body">
+                <h3>How to use</h3>
+                <ol>
+                    <li>
+                        Open link <a
+                            href="https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming"
+                            target="_blank">https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming</a>
+                    </li>
+                    <li>
+                        <div>In URL bar, Type <code>javascript:</code> and paste the following script afterward, then press
+                            Enter
+                        </div>
+                        <textarea id="script_box" class="form-control" readonly style="color: white;">(()=>{const a=()=>{const n=document.getElementsByClassName("profile_small_header_name")[0].children[0].textContent,o=document.getElementById("personaldata_elements_container").querySelectorAll("tr"),p=["Yes","\u0414\u0430","Ano","Ja","Kyll\xE4","Oui","\u039D\u03B1\u03B9","Igen","S\xEC","\u306F\u3044","\uC608","Tak","Sim","Da","\u662F","S\xED","\u0E43\u0E0A\u0E48","Evet","\u0422\u0430\u043A"];let q=n+",";for(let r=1;r<o.length;r++){const s=o[r].querySelectorAll("td");let t="";for(let u=0;u<s.length;u++)t+=0===u?s[u].textContent+"-":-1===p.indexOf(s[u].textContent)?"0":"1";q+=t+","}window.location="https://illuminate.dotasphere.com/#"+q},b=document.getElementById("load_more_button"),c=document.getElementById("inventory_history_loading"),d=()=>{return b&&"none"!==b.style.display||c&&"none"!==c.style.display},e=()=>b&&"none"!==b.style.display,f=()=>b.click(),h=document.getElementById("personaldata_elements_container"),k=document.createElement("h1"),l=document.createTextNode("Loading more data "),m=document.createElement("img");m.src="https://steamcommunity-a.akamaihd.net/public/images/login/throbber.gif",k.appendChild(l),k.appendChild(m),h.insertBefore(k,h.childNodes[0]),(()=>{const n=setInterval(()=>{e()?f():!d()&&(clearInterval(n),console.log(`done`),a())},100)})()})()</textarea>
+                        <div>If you're not comfortable using compressed script, visit <a
+                                href="https://github.com/bongikairu/illuminate">https://github.com/bongikairu/illuminate</a> for
+                            full version
+                        </div>
+                    </li>
+                    <li>
+                        Wait until data is loaded, that's all
+                    </li>
+                </ol>
+                <span class="text-warning">Note: Script currently only working on chrome. You might get an error using other browser.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <h3>Privacy Policy</h3>
+        <div>
+            This tool is powered mainly by OpenDota API and did everything client-side. That
+            means no data is event transferred to us and is only yours to see. Google Analytics,
+            however, will keep an anonymous record of your visit for analytical use.
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <h3>Development</h3>
+        <span>If you're interested in helping, or found a bug, open as issue/mr on <a
+                href="https://github.com/bongikairu/illuminate">https://github.com/bongikairu/illuminate</a></span>
+    </div>
+
+    <hr/>
+
+    <div class="mt-3 text-center text-muted">
+        <div>Illuminate - Automatic Dota 2 Reported Match Data Linker</div>
+        <div>by <a href="https://github.com/bongikairu">@bongikairu</a></div>
+        <div>Powered by <a href="https://docs.opendota.com/">OpenDota API</a></div>
+        <div id="rip">RIP yearbeast and d2armory</div>
+    </div>
+
+</div>
+
+</body>
+
+<script>
+    // https://github.com/kronusme/dota2-api/blob/master/data/heroes.json
+    const heroes = {
+        "heroes": [
+            {
+                "name": "antimage",
+                "id": 1,
+                "localized_name": "Anti-Mage"
+            }, {
+                "name": "axe",
+                "id": 2,
+                "localized_name": "Axe"
+            }, {
+                "name": "bane",
+                "id": 3,
+                "localized_name": "Bane"
+            }, {
+                "name": "bloodseeker",
+                "id": 4,
+                "localized_name": "Bloodseeker"
+            }, {
+                "name": "crystal_maiden",
+                "id": 5,
+                "localized_name": "Crystal Maiden"
+            }, {
+                "name": "drow_ranger",
+                "id": 6,
+                "localized_name": "Drow Ranger"
+            }, {
+                "name": "earthshaker",
+                "id": 7,
+                "localized_name": "Earthshaker"
+            }, {
+                "name": "juggernaut",
+                "id": 8,
+                "localized_name": "Juggernaut"
+            }, {
+                "name": "mirana",
+                "id": 9,
+                "localized_name": "Mirana"
+            }, {
+                "name": "nevermore",
+                "id": 11,
+                "localized_name": "Shadow Fiend"
+            }, {
+                "name": "morphling",
+                "id": 10,
+                "localized_name": "Morphling"
+            }, {
+                "name": "phantom_lancer",
+                "id": 12,
+                "localized_name": "Phantom Lancer"
+            }, {
+                "name": "puck",
+                "id": 13,
+                "localized_name": "Puck"
+            }, {
+                "name": "pudge",
+                "id": 14,
+                "localized_name": "Pudge"
+            }, {
+                "name": "razor",
+                "id": 15,
+                "localized_name": "Razor"
+            }, {
+                "name": "sand_king",
+                "id": 16,
+                "localized_name": "Sand King"
+            }, {
+                "name": "storm_spirit",
+                "id": 17,
+                "localized_name": "Storm Spirit"
+            }, {
+                "name": "sven",
+                "id": 18,
+                "localized_name": "Sven"
+            }, {
+                "name": "tiny",
+                "id": 19,
+                "localized_name": "Tiny"
+            }, {
+                "name": "vengefulspirit",
+                "id": 20,
+                "localized_name": "Vengeful Spirit"
+            }, {
+                "name": "windrunner",
+                "id": 21,
+                "localized_name": "Windranger"
+            }, {
+                "name": "zuus",
+                "id": 22,
+                "localized_name": "Zeus"
+            }, {
+                "name": "kunkka",
+                "id": 23,
+                "localized_name": "Kunkka"
+            }, {
+                "name": "lina",
+                "id": 25,
+                "localized_name": "Lina"
+            }, {
+                "name": "lich",
+                "id": 31,
+                "localized_name": "Lich"
+            }, {
+                "name": "lion",
+                "id": 26,
+                "localized_name": "Lion"
+            }, {
+                "name": "shadow_shaman",
+                "id": 27,
+                "localized_name": "Shadow Shaman"
+            }, {
+                "name": "slardar",
+                "id": 28,
+                "localized_name": "Slardar"
+            }, {
+                "name": "tidehunter",
+                "id": 29,
+                "localized_name": "Tidehunter"
+            }, {
+                "name": "witch_doctor",
+                "id": 30,
+                "localized_name": "Witch Doctor"
+            }, {
+                "name": "riki",
+                "id": 32,
+                "localized_name": "Riki"
+            }, {
+                "name": "enigma",
+                "id": 33,
+                "localized_name": "Enigma"
+            }, {
+                "name": "tinker",
+                "id": 34,
+                "localized_name": "Tinker"
+            }, {
+                "name": "sniper",
+                "id": 35,
+                "localized_name": "Sniper"
+            }, {
+                "name": "necrolyte",
+                "id": 36,
+                "localized_name": "Necrophos"
+            }, {
+                "name": "warlock",
+                "id": 37,
+                "localized_name": "Warlock"
+            }, {
+                "name": "beastmaster",
+                "id": 38,
+                "localized_name": "Beastmaster"
+            }, {
+                "name": "queenofpain",
+                "id": 39,
+                "localized_name": "Queen of Pain"
+            }, {
+                "name": "venomancer",
+                "id": 40,
+                "localized_name": "Venomancer"
+            }, {
+                "name": "faceless_void",
+                "id": 41,
+                "localized_name": "Faceless Void"
+            }, {
+                "name": "skeleton_king",
+                "id": 42,
+                "localized_name": "Skeleton King"
+            }, {
+                "name": "death_prophet",
+                "id": 43,
+                "localized_name": "Death Prophet"
+            }, {
+                "name": "phantom_assassin",
+                "id": 44,
+                "localized_name": "Phantom Assassin"
+            }, {
+                "name": "pugna",
+                "id": 45,
+                "localized_name": "Pugna"
+            }, {
+                "name": "templar_assassin",
+                "id": 46,
+                "localized_name": "Templar Assassin"
+            }, {
+                "name": "viper",
+                "id": 47,
+                "localized_name": "Viper"
+            }, {
+                "name": "luna",
+                "id": 48,
+                "localized_name": "Luna"
+            }, {
+                "name": "dragon_knight",
+                "id": 49,
+                "localized_name": "Dragon Knight"
+            }, {
+                "name": "dazzle",
+                "id": 50,
+                "localized_name": "Dazzle"
+            }, {
+                "name": "rattletrap",
+                "id": 51,
+                "localized_name": "Clockwerk"
+            }, {
+                "name": "leshrac",
+                "id": 52,
+                "localized_name": "Leshrac"
+            }, {
+                "name": "furion",
+                "id": 53,
+                "localized_name": "Nature's Prophet"
+            }, {
+                "name": "life_stealer",
+                "id": 54,
+                "localized_name": "Lifestealer"
+            }, {
+                "name": "dark_seer",
+                "id": 55,
+                "localized_name": "Dark Seer"
+            }, {
+                "name": "clinkz",
+                "id": 56,
+                "localized_name": "Clinkz"
+            }, {
+                "name": "omniknight",
+                "id": 57,
+                "localized_name": "Omniknight"
+            }, {
+                "name": "enchantress",
+                "id": 58,
+                "localized_name": "Enchantress"
+            }, {
+                "name": "huskar",
+                "id": 59,
+                "localized_name": "Huskar"
+            }, {
+                "name": "night_stalker",
+                "id": 60,
+                "localized_name": "Night Stalker"
+            }, {
+                "name": "broodmother",
+                "id": 61,
+                "localized_name": "Broodmother"
+            }, {
+                "name": "bounty_hunter",
+                "id": 62,
+                "localized_name": "Bounty Hunter"
+            }, {
+                "name": "weaver",
+                "id": 63,
+                "localized_name": "Weaver"
+            }, {
+                "name": "jakiro",
+                "id": 64,
+                "localized_name": "Jakiro"
+            }, {
+                "name": "batrider",
+                "id": 65,
+                "localized_name": "Batrider"
+            }, {
+                "name": "chen",
+                "id": 66,
+                "localized_name": "Chen"
+            }, {
+                "name": "spectre",
+                "id": 67,
+                "localized_name": "Spectre"
+            }, {
+                "name": "doom_bringer",
+                "id": 69,
+                "localized_name": "Doom"
+            }, {
+                "name": "ancient_apparition",
+                "id": 68,
+                "localized_name": "Ancient Apparition"
+            }, {
+                "name": "ursa",
+                "id": 70,
+                "localized_name": "Ursa"
+            }, {
+                "name": "spirit_breaker",
+                "id": 71,
+                "localized_name": "Spirit Breaker"
+            }, {
+                "name": "gyrocopter",
+                "id": 72,
+                "localized_name": "Gyrocopter"
+            }, {
+                "name": "alchemist",
+                "id": 73,
+                "localized_name": "Alchemist"
+            }, {
+                "name": "invoker",
+                "id": 74,
+                "localized_name": "Invoker"
+            }, {
+                "name": "silencer",
+                "id": 75,
+                "localized_name": "Silencer"
+            }, {
+                "name": "obsidian_destroyer",
+                "id": 76,
+                "localized_name": "Outworld Devourer"
+            }, {
+                "name": "lycan",
+                "id": 77,
+                "localized_name": "Lycanthrope"
+            }, {
+                "name": "brewmaster",
+                "id": 78,
+                "localized_name": "Brewmaster"
+            }, {
+                "name": "shadow_demon",
+                "id": 79,
+                "localized_name": "Shadow Demon"
+            }, {
+                "name": "lone_druid",
+                "id": 80,
+                "localized_name": "Lone Druid"
+            }, {
+                "name": "chaos_knight",
+                "id": 81,
+                "localized_name": "Chaos Knight"
+            }, {
+                "name": "meepo",
+                "id": 82,
+                "localized_name": "Meepo"
+            }, {
+                "name": "treant",
+                "id": 83,
+                "localized_name": "Treant Protector"
+            }, {
+                "name": "ogre_magi",
+                "id": 84,
+                "localized_name": "Ogre Magi"
+            }, {
+                "name": "undying",
+                "id": 85,
+                "localized_name": "Undying"
+            }, {
+                "name": "rubick",
+                "id": 86,
+                "localized_name": "Rubick"
+            }, {
+                "name": "disruptor",
+                "id": 87,
+                "localized_name": "Disruptor"
+            }, {
+                "name": "nyx_assassin",
+                "id": 88,
+                "localized_name": "Nyx Assassin"
+            }, {
+                "name": "naga_siren",
+                "id": 89,
+                "localized_name": "Naga Siren"
+            }, {
+                "name": "keeper_of_the_light",
+                "id": 90,
+                "localized_name": "Keeper of the Light"
+            }, {
+                "name": "wisp",
+                "id": 91,
+                "localized_name": "Wisp"
+            }, {
+                "name": "visage",
+                "id": 92,
+                "localized_name": "Visage"
+            }, {
+                "name": "slark",
+                "id": 93,
+                "localized_name": "Slark"
+            }, {
+                "name": "medusa",
+                "id": 94,
+                "localized_name": "Medusa"
+            }, {
+                "name": "troll_warlord",
+                "id": 95,
+                "localized_name": "Troll Warlord"
+            }, {
+                "name": "centaur",
+                "id": 96,
+                "localized_name": "Centaur Warrunner"
+            }, {
+                "name": "magnataur",
+                "id": 97,
+                "localized_name": "Magnus"
+            }, {
+                "name": "shredder",
+                "id": 98,
+                "localized_name": "Timbersaw"
+            }, {
+                "name": "bristleback",
+                "id": 99,
+                "localized_name": "Bristleback"
+            }, {
+                "name": "tusk",
+                "id": 100,
+                "localized_name": "Tusk"
+            }, {
+                "name": "skywrath_mage",
+                "id": 101,
+                "localized_name": "Skywrath Mage"
+            }, {
+                "name": "abaddon",
+                "id": 102,
+                "localized_name": "Abaddon"
+            }, {
+                "name": "elder_titan",
+                "id": 103,
+                "localized_name": "Elder Titan"
+            }, {
+                "name": "legion_commander",
+                "id": 104,
+                "localized_name": "Legion Commander"
+            }, {
+                "name": "ember_spirit",
+                "id": 106,
+                "localized_name": "Ember Spirit"
+            }, {
+                "name": "earth_spirit",
+                "id": 107,
+                "localized_name": "Earth Spirit"
+            }, {
+                "name": "abyssal_underlord",
+                "id": 108,
+                "localized_name": "Abyssal Underlord"
+            }, {
+                "name": "terrorblade",
+                "id": 109,
+                "localized_name": "Terrorblade"
+            }, {
+                "name": "phoenix",
+                "id": 110,
+                "localized_name": "Phoenix"
+            }, {
+                "name": "techies",
+                "id": 105,
+                "localized_name": "Techies"
+            }, {
+                "name": "oracle",
+                "id": 111,
+                "localized_name": "Oracle"
+            }, {
+                "name": "winter_wyvern",
+                "id": 112,
+                "localized_name": "Winter Wyvern"
+            }, {
+                "name": "arc_warden",
+                "id": 113,
+                "localized_name": "Arc Warden"
+            }, {
+                "name": "monkey_king",
+                "id": 114,
+                "localized_name": "Monkey King"
+            }, {
+                "name": "dark_willow",
+                "id": 119,
+                "localized_name": "Dark Willow"
+            }, {
+                "name": "pangolier",
+                "id": 120,
+                "localized_name": "Pangolier"
+            }, {
+                "name": "grimstroke",
+                "id": 121,
+                "localized_name": "Grimstroke"
+            }, {
+                "name": "mars",
+                "id": 129,
+                "localized_name": "Mars"
+            }
+        ]
+    };
+    const heroes_map = heroes.heroes.reduce((prev, cur) => Object.assign({}, prev, {[cur.id]: cur}), {});
+    $(() => {
+
+        $("#script_box").click(() => {
+            $("#script_box").select();
+        });
+
+        let filter_outcome = "all";
+        let filter_commend = false;
+        let filter_report = false;
+
+        const regenerate_style = () => {
+
+            let style_text = ".match_row { display: none; } ";
+            if (filter_commend && filter_report) {
+                if (filter_outcome === "win") {
+                    style_text += `.outcome_win.data_commend.data_report { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_lose.data_commend.data_report { display: table-row; } `;
+                } else {
+                    style_text += `.data_commend.data_report { display: table-row; } `;
+                }
+            } else if (filter_commend) {
+                if (filter_outcome === "win") {
+                    style_text += `.outcome_win.data_commend { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_lose.data_commend { display: table-row; } `;
+                } else {
+                    style_text += `.data_commend { display: table-row; } `;
+                }
+            } else if (filter_report) {
+                if (filter_outcome === "win") {
+                    style_text += `.outcome_win.data_report { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_lose.data_report { display: table-row; } `;
+                } else {
+                    style_text += `.data_report { display: table-row; } `;
+                }
+            } else {
+                if (filter_outcome === "win") {
+                    style_text += `.outcome_win { display: table-row; } `;
+                } else if (filter_outcome === "lose") {
+                    style_text += `.outcome_lose { display: table-row; } `;
+                } else {
+                    style_text += `.data_unknown { display: table-row; } `;
+                    style_text += `.outcome_unknown { display: table-row; } `;
+                    style_text += `.outcome_win { display: table-row; } `;
+                    style_text += `.outcome_lose { display: table-row; } `;
+                }
+            }
+            $("#filter_style").text(style_text);
+        };
+        regenerate_style();
+
+        $("#filter_commend").click(function () {
+            const val = $(this).is(':checked');
+            filter_commend = val;
+            if (val) {
+                $(this).parent().addClass("active");
+            } else {
+                $(this).parent().removeClass("active");
+            }
+            regenerate_style();
+        });
+        $("#filter_report").click(function () {
+            const val = $(this).is(':checked');
+            filter_report = val;
+            if (val) {
+                $(this).parent().addClass("active");
+            } else {
+                $(this).parent().removeClass("active");
+            }
+            regenerate_style();
+        });
+        $("input[name=filter_outcome]").click(function () {
+            const val = $(this).val();
+            filter_outcome = val;
+            $(this).parent().parent().children().removeClass("active");
+            $(this).parent().addClass("active");
+            regenerate_style();
+        });
+
+        // clear broken data
+        for (let key in localStorage) {
+            if (key.startsWith("match-")) localStorage.removeItem(key);
+        }
+
+        if (location.hash && location.hash !== "#") {
+            const $output = $("#output");
+            $(".hideondata").hide();
+            $output.show();
+            const raw_data = location.hash.substring(1);
+            const data = raw_data.split(",");
+            const name = decodeURI(data[0]);
+            $("#output_title").append(`<h2>${name}'s reported data</h2>`);
+            const $table = $(`<table class="table table-striped table-sm"></table>`);
+            const $tbody = $(`<tbody></table>`);
+            $("#output_data").append($table);
+            $table.append($tbody);
+
+            // const $loading = $(`<div id="loading">Loading ...</div>`);
+            // $("#output_data").append($loading);
+
+            let last_row_id = "";
+            let last_row_elem = null;
+            let last_row_summary = null;
+
+            const create_row = (data) => {
+                const {
+                    match_id,
+                    date_string,
+                    outcome,
+                    gamemode,
+                    duration,
+                    score_k,
+                    score_d,
+                    score_a,
+                    hero_img,
+                    report_comm,
+                    report_abi,
+                    report_feed,
+                    commend_teach,
+                    commend_lead,
+                    commend_friend,
+                    commend_forgive,
+                } = data;
+
+                const outcome_el = outcome === "" ? "" : (outcome ? `<span class="win ml-1 font-weight-bold">WIN</span>` : `<span class="lose ml-1 font-weight-bold">LOSE</span>`);
+
+                const col1 = (`<td class="match text-right"><a href="https://www.opendota.com/matches/${match_id}" target="_blank">${match_id}</a> ${outcome_el}<br /><span class="gamemode mr-1">${gamemode}</span><span class="duration mr-1">${duration}</span><a class="opendota" href="https://www.opendota.com/matches/${match_id}" target="_blank">&lt;/&gt;</a> <a class="dotabuff" href="https://www.dotabuff.com/matches/${match_id}" target="_blank">D</a> <a class="stratz" href="https://stratz.com/en-us/match/${match_id}" target="_blank">⇑</a><br />${date_string}</td>`);
+                const col2 = (`<td class="icon pb-1 text-center"><img class="mb-1 mt-1" src="${hero_img}" height="30"><br /><span class="score_k">${score_k}</span><span class="kda_spacer">/</span><span class="score_d">${score_d}</span><span class="kda_spacer">/</span><span class="score_a">${score_a}</span></td>`);
+                let summary_list = [];
+                if (report_comm) summary_list.push(`<span class="report"><i class="far fa-headphones"></i> Reported: Comm Abuse</span>`);
+                if (report_abi) summary_list.push(`<span class="report"><i class="far fa-magic"></i> Reported: Ability Abuse</span>`);
+                if (report_feed) summary_list.push(`<span class="report"><i class="far fa-utensils"></i> Reported: Intentional Feeding</span>`);
+                if (commend_teach || commend_lead || commend_friend || commend_forgive) summary_list.push(`<span class="commend"><i class="far fa-thumbs-up"></i> Commended</span>`);
+                if (!report_comm && !report_abi && !report_feed && !commend_teach && !commend_lead && !commend_friend && !commend_forgive) {
+                    if (Date.parse(date_string) / 1000 >= 1557187200) {
+                        // Battlepass 2019 removed rank role report and changed to block (released 2019-05-07)
+                        summary_list.push(`<span class="report"><i class="far fa-id-badge"></i> Blocked By Another Player</span>`);
+                    } else {
+                        summary_list.push(`<span class="report"><i class="far fa-id-badge"></i> Reported: Did Not Play Selected Role</span>`);
+                    }
+                }
+
+                let summary = summary_list.join("<br />");
+                const col3 = (`<td class="summary">${summary}</td>`);
+
+                if (outcome === "") {
+                    class1 = "outcome_unknown";
+                } else if (outcome) {
+                    class1 = "outcome_win";
+                } else {
+                    class1 = "outcome_lose";
+                }
+
+                if (report_comm || report_abi || report_feed) {
+                    class2 = "data_report";
+                } else if (commend_teach || commend_lead || commend_friend || commend_forgive) {
+                    class2 = "data_commend";
+                } else {
+                    class2 = "data_unknown"
+                }
+
+                if (last_row_id === match_id) {
+                    last_row_summary.append("<hr />");
+                    last_row_summary.append(summary);
+                    last_row_elem.addClass(class1);
+                    last_row_elem.addClass(class2);
+                } else {
+                    const $tr = $(`<tr class="match_row ${class1} ${class2}"></tr>`);
+                    const $col1 = $(col1);
+                    const $col2 = $(col2);
+                    const $col3 = $(col3);
+                    $tr.append($col1);
+                    $tr.append($col2);
+                    $tr.append($col3);
+                    last_row_id = match_id;
+                    last_row_elem = $tr;
+                    last_row_summary = $col3;
+                    $tbody.append($tr);
+                }
+
+            };
+
+            const formatGameMode = (lobby, mode) => {
+                const lobby_list = {
+                    0: "Normal",
+                    1: "Practice",
+                    2: "Tournament",
+                    3: "Tutorial",
+                    4: "Co-op with bots",
+                    5: "Team match",
+                    6: "Solo Queue",
+                    7: "Ranked",
+                    8: "Solo Mid 1vs1",
+                };
+                const mode_list = {
+                    23: "Turbo",
+                    24: "Mutation",
+                };
+                return (lobby_list[lobby] || "Unknown") + " " + (mode_list[mode] || "");
+            };
+
+            const formatDuration = (seconds) => {
+                let leftover = seconds;
+                let output = "";
+                if (leftover > 3600) {
+                    output += Math.floor(leftover / 3600) + ":";
+                    leftover = leftover % 3600;
+                }
+                let minute = Math.floor(leftover / 60);
+                let second = leftover % 60;
+                if (minute < 10) minute = `0${minute}`;
+                if (second < 10) second = `0${second}`;
+                output += `${minute}:${second}`;
+                return output;
+            };
+
+            const process = (row, i) => {
+                if (!row) {
+                    if (i < data.length - 1) {
+                        setTimeout(() => {
+                            process(data[i + 1], i + 1);
+                        }, 100); // throttle to 1 request/sec
+                    } else {
+                        $("#loading").hide();
+                    }
+                    return;
+                }
+                const parsed_row = [row.split("-")[0], ...row.split("-")[1].split("")];
+                const match_id = parsed_row[0];
+                const report_comm = parsed_row[2] === "1";
+                const report_abi = parsed_row[3] === "1";
+                const report_feed = parsed_row[4] === "1";
+                const commend_lead = parsed_row[5] === "1";
+                const commend_teach = parsed_row[6] === "1";
+                const commend_friend = parsed_row[7] === "1";
+                const commend_forgive = parsed_row[8] === "1";
+                if (isNaN(parseInt(match_id))) return;
+
+                const process_response = (match_data) => {
+
+                    const {
+                        date_string,
+                        outcome,
+                        gamemode,
+                        duration,
+                        score_k,
+                        score_d,
+                        score_a,
+                        hero_img,
+                    } = match_data;
+
+                    create_row({
+                        match_id,
+
+                        date_string,
+                        outcome,
+                        gamemode,
+                        duration,
+                        score_k,
+                        score_d,
+                        score_a,
+                        hero_img,
+
+                        report_comm,
+                        report_abi,
+                        report_feed,
+                        commend_lead,
+                        commend_teach,
+                        commend_friend,
+                        commend_forgive,
+                    });
+                };
+
+                const cache = localStorage.getItem(`matchdata-${match_id}`);
+                if (cache) {
+                    process_response(JSON.parse(cache));
+                    if (i < data.length - 1) {
+                        setTimeout(() => {
+                            process(data[i + 1], i + 1);
+                        }, 100); // throttle to 1 request/sec
+                    } else {
+                        $("#loading").hide();
+                    }
+                } else {
+                    $.get(`https://api.opendota.com/api/matches/${match_id}`).done((response) => {
+                        if (response.error) {
+                            console.log(`Error retrieving ${match_id}`);
+                            // $tbody.append(`<tr><td colspan="3">Error retrieving ${match_id}</td></tr>`);
+                            create_row({
+                                match_id,
+                                date_string: "Error Match not found",
+                                outcome: "",
+                                gamemode: "",
+                                duration: "",
+                                score_k: "-",
+                                score_d: "-",
+                                score_a: "-",
+                                hero_img: "http://via.placeholder.com/127x71?text=Error",
+                                report_comm,
+                                report_abi,
+                                report_feed,
+                                commend_lead,
+                                commend_teach,
+                                commend_friend,
+                                commend_forgive,
+                            });
+                            return;
+                        }
+                        const timestamp = response.start_time;
+                        const date_obj = new Date(timestamp * 1000);
+                        const date_string = date_obj.toLocaleString();
+
+                        const gamemode = formatGameMode(response.lobby_type, response.game_mode);
+                        const duration = formatDuration(response.duration);
+
+                        let players = response.players.filter((p) => p.personaname === name);
+                        let player = players.length === 1 ? players[0] : null;
+                        while (!player) {
+                            let acc_id = localStorage.getItem(`account_id`);
+                            if (!acc_id) {
+                                console.log(response.players);
+                                const match_summary = response.players.map((p, i) => `${i + 1} = ${p.personaname || "Unknown"} (${heroes_map[p.hero_id].localized_name})`).join("\n");
+                                let idx = prompt(`Who are you in this match?\n\n${match_summary}\n\ntype in 0 to cancel`);
+                                try {
+                                    idx = parseInt(idx);
+                                } catch (e) {
+                                    idx = 10000;
+                                }
+                                if (idx === 0) {
+                                    break;
+                                }
+                                player = response.players[idx - 1];
+                                if (player) {
+                                    acc_id = player.account_id;
+                                    localStorage.setItem(`account_id`, acc_id);
+                                }
+                            } else {
+                                players = response.players.filter((p) => `${p.account_id}` === acc_id);
+                                player = players.length === 1 ? players[0] : null;
+                                if (!player) {
+                                    localStorage.setItem(`account_id`, "");
+                                }
+                            }
+                        }
+                        if (!player) {
+                            console.log(`Error retrieving player data of ${match_id}`);
+                            // $tbody.append(`<tr><td colspan="3">Error retrieving player data of ${match_id}</td></tr>`);
+                            create_row({
+                                match_id,
+                                date_string: date_string + "<br />Error Unable to identify your hero",
+                                outcome: "",
+                                gamemode,
+                                duration,
+                                score_k: "-",
+                                score_d: "-",
+                                score_a: "-",
+                                hero_img: "http://via.placeholder.com/127x71?text=Error",
+                                report_comm,
+                                report_abi,
+                                report_feed,
+                                commend_lead,
+                                commend_teach,
+                                commend_friend,
+                                commend_forgive,
+                            });
+                            return;
+                        }
+                        const hero_id = player.hero_id;
+                        const hero = heroes_map[hero_id]; // heroes.heroes.filter((h) => h.id === hero_id)[0];
+                        if (!hero) {
+                            console.log(`Error retrieving hero data of ${match_id}: ${hero_id}`);
+                            // $tbody.append(`<tr><td colspan="3">Error retrieving hero data of ${match_id}</td></tr>`);
+                            create_row({
+                                match_id,
+                                date_string: date_string + "<br />Error Hero data not found",
+                                outcome: "",
+                                gamemode,
+                                duration,
+                                score_k: "-",
+                                score_d: "-",
+                                score_a: "-",
+                                hero_img: "http://via.placeholder.com/127x71?text=Error",
+                                report_comm,
+                                report_abi,
+                                report_feed,
+                                commend_lead,
+                                commend_teach,
+                                commend_friend,
+                                commend_forgive,
+                            });
+                            return;
+                        }
+                        const hero_name = hero.name;
+                        const hero_fullname = hero.localized_name;
+                        const hero_img = `http://cdn.dota2.com/apps/dota2/images/heroes/${hero_name}_hphover.png`;
+                        const score_k = player.kills;
+                        const score_d = player.deaths;
+                        const score_a = player.assists;
+                        const outcome = player.win;
+
+                        const match_data = {
+                            date_string,
+                            outcome,
+                            gamemode,
+                            duration,
+                            score_k,
+                            score_d,
+                            score_a,
+                            hero_img,
+                        };
+
+                        localStorage.setItem(`matchdata-${match_id}`, JSON.stringify(match_data));
+                        process_response(match_data);
+
+                    }).fail(() => {
+                        console.log(`Error retrieving ${match_id}`);
+                        // $tbody.append(`<tr><td colspan="3">Error retrieving ${match_id}</td></tr>`);
+                        create_row({
+                            match_id,
+                            date_string: "Error OpenDota not responding",
+                            outcome: "",
+                            gamemode: "",
+                            duration: "",
+                            score_k: "-",
+                            score_d: "-",
+                            score_a: "-",
+                            hero_img: "http://via.placeholder.com/127x71?text=Error",
+                            report_comm,
+                            report_abi,
+                            report_feed,
+                            commend_lead,
+                            commend_teach,
+                            commend_friend,
+                            commend_forgive,
+                        });
+                    }).always(() => {
+                        if (i < data.length - 1) {
+                            setTimeout(() => {
+                                process(data[i + 1], i + 1);
+                            }, 1000); // throttle to 1 request/sec
+                        } else {
+                            $("#loading").hide();
+                        }
+                    });
+                }
+            };
+            process(data[1], 1);
+        }
+    });
+</script>
+
+</html>
