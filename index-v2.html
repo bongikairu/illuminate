@@ -156,478 +156,12 @@
     const {useState, useEffect, useCallback, Fragment} = React;
 
     // https://github.com/kronusme/dota2-api/blob/master/data/heroes.json
+    // const compacted_hero_list = heroes.heroes.map(h => `${h.id}:${h.name}`).join("|");
+
+    const compacted_hero_list = "1:antimage|2:axe|3:bane|4:bloodseeker|5:crystal_maiden|6:drow_ranger|7:earthshaker|8:juggernaut|9:mirana|11:nevermore|10:morphling|12:phantom_lancer|13:puck|14:pudge|15:razor|16:sand_king|17:storm_spirit|18:sven|19:tiny|20:vengefulspirit|21:windrunner|22:zuus|23:kunkka|25:lina|31:lich|26:lion|27:shadow_shaman|28:slardar|29:tidehunter|30:witch_doctor|32:riki|33:enigma|34:tinker|35:sniper|36:necrolyte|37:warlock|38:beastmaster|39:queenofpain|40:venomancer|41:faceless_void|42:skeleton_king|43:death_prophet|44:phantom_assassin|45:pugna|46:templar_assassin|47:viper|48:luna|49:dragon_knight|50:dazzle|51:rattletrap|52:leshrac|53:furion|54:life_stealer|55:dark_seer|56:clinkz|57:omniknight|58:enchantress|59:huskar|60:night_stalker|61:broodmother|62:bounty_hunter|63:weaver|64:jakiro|65:batrider|66:chen|67:spectre|69:doom_bringer|68:ancient_apparition|70:ursa|71:spirit_breaker|72:gyrocopter|73:alchemist|74:invoker|75:silencer|76:obsidian_destroyer|77:lycan|78:brewmaster|79:shadow_demon|80:lone_druid|81:chaos_knight|82:meepo|83:treant|84:ogre_magi|85:undying|86:rubick|87:disruptor|88:nyx_assassin|89:naga_siren|90:keeper_of_the_light|91:wisp|92:visage|93:slark|94:medusa|95:troll_warlord|96:centaur|97:magnataur|98:shredder|99:bristleback|100:tusk|101:skywrath_mage|102:abaddon|103:elder_titan|104:legion_commander|106:ember_spirit|107:earth_spirit|108:abyssal_underlord|109:terrorblade|110:phoenix|105:techies|111:oracle|112:winter_wyvern|113:arc_warden|114:monkey_king|119:dark_willow|120:pangolier|121:grimstroke|129:mars";
+    const full_hero_list = compacted_hero_list.split("|").map(r => r.split(":")).map(r => ({id: r[0], name: r[1]}));
     const heroes = {
-        "heroes": [
-            {
-                "name": "antimage",
-                "id": 1,
-                "localized_name": "Anti-Mage"
-            }, {
-                "name": "axe",
-                "id": 2,
-                "localized_name": "Axe"
-            }, {
-                "name": "bane",
-                "id": 3,
-                "localized_name": "Bane"
-            }, {
-                "name": "bloodseeker",
-                "id": 4,
-                "localized_name": "Bloodseeker"
-            }, {
-                "name": "crystal_maiden",
-                "id": 5,
-                "localized_name": "Crystal Maiden"
-            }, {
-                "name": "drow_ranger",
-                "id": 6,
-                "localized_name": "Drow Ranger"
-            }, {
-                "name": "earthshaker",
-                "id": 7,
-                "localized_name": "Earthshaker"
-            }, {
-                "name": "juggernaut",
-                "id": 8,
-                "localized_name": "Juggernaut"
-            }, {
-                "name": "mirana",
-                "id": 9,
-                "localized_name": "Mirana"
-            }, {
-                "name": "nevermore",
-                "id": 11,
-                "localized_name": "Shadow Fiend"
-            }, {
-                "name": "morphling",
-                "id": 10,
-                "localized_name": "Morphling"
-            }, {
-                "name": "phantom_lancer",
-                "id": 12,
-                "localized_name": "Phantom Lancer"
-            }, {
-                "name": "puck",
-                "id": 13,
-                "localized_name": "Puck"
-            }, {
-                "name": "pudge",
-                "id": 14,
-                "localized_name": "Pudge"
-            }, {
-                "name": "razor",
-                "id": 15,
-                "localized_name": "Razor"
-            }, {
-                "name": "sand_king",
-                "id": 16,
-                "localized_name": "Sand King"
-            }, {
-                "name": "storm_spirit",
-                "id": 17,
-                "localized_name": "Storm Spirit"
-            }, {
-                "name": "sven",
-                "id": 18,
-                "localized_name": "Sven"
-            }, {
-                "name": "tiny",
-                "id": 19,
-                "localized_name": "Tiny"
-            }, {
-                "name": "vengefulspirit",
-                "id": 20,
-                "localized_name": "Vengeful Spirit"
-            }, {
-                "name": "windrunner",
-                "id": 21,
-                "localized_name": "Windranger"
-            }, {
-                "name": "zuus",
-                "id": 22,
-                "localized_name": "Zeus"
-            }, {
-                "name": "kunkka",
-                "id": 23,
-                "localized_name": "Kunkka"
-            }, {
-                "name": "lina",
-                "id": 25,
-                "localized_name": "Lina"
-            }, {
-                "name": "lich",
-                "id": 31,
-                "localized_name": "Lich"
-            }, {
-                "name": "lion",
-                "id": 26,
-                "localized_name": "Lion"
-            }, {
-                "name": "shadow_shaman",
-                "id": 27,
-                "localized_name": "Shadow Shaman"
-            }, {
-                "name": "slardar",
-                "id": 28,
-                "localized_name": "Slardar"
-            }, {
-                "name": "tidehunter",
-                "id": 29,
-                "localized_name": "Tidehunter"
-            }, {
-                "name": "witch_doctor",
-                "id": 30,
-                "localized_name": "Witch Doctor"
-            }, {
-                "name": "riki",
-                "id": 32,
-                "localized_name": "Riki"
-            }, {
-                "name": "enigma",
-                "id": 33,
-                "localized_name": "Enigma"
-            }, {
-                "name": "tinker",
-                "id": 34,
-                "localized_name": "Tinker"
-            }, {
-                "name": "sniper",
-                "id": 35,
-                "localized_name": "Sniper"
-            }, {
-                "name": "necrolyte",
-                "id": 36,
-                "localized_name": "Necrophos"
-            }, {
-                "name": "warlock",
-                "id": 37,
-                "localized_name": "Warlock"
-            }, {
-                "name": "beastmaster",
-                "id": 38,
-                "localized_name": "Beastmaster"
-            }, {
-                "name": "queenofpain",
-                "id": 39,
-                "localized_name": "Queen of Pain"
-            }, {
-                "name": "venomancer",
-                "id": 40,
-                "localized_name": "Venomancer"
-            }, {
-                "name": "faceless_void",
-                "id": 41,
-                "localized_name": "Faceless Void"
-            }, {
-                "name": "skeleton_king",
-                "id": 42,
-                "localized_name": "Skeleton King"
-            }, {
-                "name": "death_prophet",
-                "id": 43,
-                "localized_name": "Death Prophet"
-            }, {
-                "name": "phantom_assassin",
-                "id": 44,
-                "localized_name": "Phantom Assassin"
-            }, {
-                "name": "pugna",
-                "id": 45,
-                "localized_name": "Pugna"
-            }, {
-                "name": "templar_assassin",
-                "id": 46,
-                "localized_name": "Templar Assassin"
-            }, {
-                "name": "viper",
-                "id": 47,
-                "localized_name": "Viper"
-            }, {
-                "name": "luna",
-                "id": 48,
-                "localized_name": "Luna"
-            }, {
-                "name": "dragon_knight",
-                "id": 49,
-                "localized_name": "Dragon Knight"
-            }, {
-                "name": "dazzle",
-                "id": 50,
-                "localized_name": "Dazzle"
-            }, {
-                "name": "rattletrap",
-                "id": 51,
-                "localized_name": "Clockwerk"
-            }, {
-                "name": "leshrac",
-                "id": 52,
-                "localized_name": "Leshrac"
-            }, {
-                "name": "furion",
-                "id": 53,
-                "localized_name": "Nature's Prophet"
-            }, {
-                "name": "life_stealer",
-                "id": 54,
-                "localized_name": "Lifestealer"
-            }, {
-                "name": "dark_seer",
-                "id": 55,
-                "localized_name": "Dark Seer"
-            }, {
-                "name": "clinkz",
-                "id": 56,
-                "localized_name": "Clinkz"
-            }, {
-                "name": "omniknight",
-                "id": 57,
-                "localized_name": "Omniknight"
-            }, {
-                "name": "enchantress",
-                "id": 58,
-                "localized_name": "Enchantress"
-            }, {
-                "name": "huskar",
-                "id": 59,
-                "localized_name": "Huskar"
-            }, {
-                "name": "night_stalker",
-                "id": 60,
-                "localized_name": "Night Stalker"
-            }, {
-                "name": "broodmother",
-                "id": 61,
-                "localized_name": "Broodmother"
-            }, {
-                "name": "bounty_hunter",
-                "id": 62,
-                "localized_name": "Bounty Hunter"
-            }, {
-                "name": "weaver",
-                "id": 63,
-                "localized_name": "Weaver"
-            }, {
-                "name": "jakiro",
-                "id": 64,
-                "localized_name": "Jakiro"
-            }, {
-                "name": "batrider",
-                "id": 65,
-                "localized_name": "Batrider"
-            }, {
-                "name": "chen",
-                "id": 66,
-                "localized_name": "Chen"
-            }, {
-                "name": "spectre",
-                "id": 67,
-                "localized_name": "Spectre"
-            }, {
-                "name": "doom_bringer",
-                "id": 69,
-                "localized_name": "Doom"
-            }, {
-                "name": "ancient_apparition",
-                "id": 68,
-                "localized_name": "Ancient Apparition"
-            }, {
-                "name": "ursa",
-                "id": 70,
-                "localized_name": "Ursa"
-            }, {
-                "name": "spirit_breaker",
-                "id": 71,
-                "localized_name": "Spirit Breaker"
-            }, {
-                "name": "gyrocopter",
-                "id": 72,
-                "localized_name": "Gyrocopter"
-            }, {
-                "name": "alchemist",
-                "id": 73,
-                "localized_name": "Alchemist"
-            }, {
-                "name": "invoker",
-                "id": 74,
-                "localized_name": "Invoker"
-            }, {
-                "name": "silencer",
-                "id": 75,
-                "localized_name": "Silencer"
-            }, {
-                "name": "obsidian_destroyer",
-                "id": 76,
-                "localized_name": "Outworld Devourer"
-            }, {
-                "name": "lycan",
-                "id": 77,
-                "localized_name": "Lycanthrope"
-            }, {
-                "name": "brewmaster",
-                "id": 78,
-                "localized_name": "Brewmaster"
-            }, {
-                "name": "shadow_demon",
-                "id": 79,
-                "localized_name": "Shadow Demon"
-            }, {
-                "name": "lone_druid",
-                "id": 80,
-                "localized_name": "Lone Druid"
-            }, {
-                "name": "chaos_knight",
-                "id": 81,
-                "localized_name": "Chaos Knight"
-            }, {
-                "name": "meepo",
-                "id": 82,
-                "localized_name": "Meepo"
-            }, {
-                "name": "treant",
-                "id": 83,
-                "localized_name": "Treant Protector"
-            }, {
-                "name": "ogre_magi",
-                "id": 84,
-                "localized_name": "Ogre Magi"
-            }, {
-                "name": "undying",
-                "id": 85,
-                "localized_name": "Undying"
-            }, {
-                "name": "rubick",
-                "id": 86,
-                "localized_name": "Rubick"
-            }, {
-                "name": "disruptor",
-                "id": 87,
-                "localized_name": "Disruptor"
-            }, {
-                "name": "nyx_assassin",
-                "id": 88,
-                "localized_name": "Nyx Assassin"
-            }, {
-                "name": "naga_siren",
-                "id": 89,
-                "localized_name": "Naga Siren"
-            }, {
-                "name": "keeper_of_the_light",
-                "id": 90,
-                "localized_name": "Keeper of the Light"
-            }, {
-                "name": "wisp",
-                "id": 91,
-                "localized_name": "Wisp"
-            }, {
-                "name": "visage",
-                "id": 92,
-                "localized_name": "Visage"
-            }, {
-                "name": "slark",
-                "id": 93,
-                "localized_name": "Slark"
-            }, {
-                "name": "medusa",
-                "id": 94,
-                "localized_name": "Medusa"
-            }, {
-                "name": "troll_warlord",
-                "id": 95,
-                "localized_name": "Troll Warlord"
-            }, {
-                "name": "centaur",
-                "id": 96,
-                "localized_name": "Centaur Warrunner"
-            }, {
-                "name": "magnataur",
-                "id": 97,
-                "localized_name": "Magnus"
-            }, {
-                "name": "shredder",
-                "id": 98,
-                "localized_name": "Timbersaw"
-            }, {
-                "name": "bristleback",
-                "id": 99,
-                "localized_name": "Bristleback"
-            }, {
-                "name": "tusk",
-                "id": 100,
-                "localized_name": "Tusk"
-            }, {
-                "name": "skywrath_mage",
-                "id": 101,
-                "localized_name": "Skywrath Mage"
-            }, {
-                "name": "abaddon",
-                "id": 102,
-                "localized_name": "Abaddon"
-            }, {
-                "name": "elder_titan",
-                "id": 103,
-                "localized_name": "Elder Titan"
-            }, {
-                "name": "legion_commander",
-                "id": 104,
-                "localized_name": "Legion Commander"
-            }, {
-                "name": "ember_spirit",
-                "id": 106,
-                "localized_name": "Ember Spirit"
-            }, {
-                "name": "earth_spirit",
-                "id": 107,
-                "localized_name": "Earth Spirit"
-            }, {
-                "name": "abyssal_underlord",
-                "id": 108,
-                "localized_name": "Abyssal Underlord"
-            }, {
-                "name": "terrorblade",
-                "id": 109,
-                "localized_name": "Terrorblade"
-            }, {
-                "name": "phoenix",
-                "id": 110,
-                "localized_name": "Phoenix"
-            }, {
-                "name": "techies",
-                "id": 105,
-                "localized_name": "Techies"
-            }, {
-                "name": "oracle",
-                "id": 111,
-                "localized_name": "Oracle"
-            }, {
-                "name": "winter_wyvern",
-                "id": 112,
-                "localized_name": "Winter Wyvern"
-            }, {
-                "name": "arc_warden",
-                "id": 113,
-                "localized_name": "Arc Warden"
-            }, {
-                "name": "monkey_king",
-                "id": 114,
-                "localized_name": "Monkey King"
-            }, {
-                "name": "dark_willow",
-                "id": 119,
-                "localized_name": "Dark Willow"
-            }, {
-                "name": "pangolier",
-                "id": 120,
-                "localized_name": "Pangolier"
-            }, {
-                "name": "grimstroke",
-                "id": 121,
-                "localized_name": "Grimstroke"
-            }, {
-                "name": "mars",
-                "id": 129,
-                "localized_name": "Mars"
-            }
-        ]
+        heroes: full_hero_list,
     };
     const heroes_map = heroes.heroes.reduce((prev, cur) => Object.assign({}, prev, {[cur.id]: cur}), {});
 
@@ -801,7 +335,7 @@
     };
 
     const MatchCard = ({match, nameList, addName, filterOutcome, filterCommend, filterReport}) => {
-        const {match_id, records} = match;
+        const {match_id, records, hasCommend, hasReport} = match;
 
         const [apiData, setApiData] = useState(false);
 
@@ -829,6 +363,18 @@
 
         useEffect(() => {
             const response = apiData;
+            let derived_data = {
+                date_string: "Error OpenDota not responding",
+                outcome: "",
+                gamemode: "",
+                duration: "",
+                score_k: "-",
+                score_d: "-",
+                score_a: "-",
+                hero_img: "http://via.placeholder.com/127x71?text=Error",
+                player: null,
+                data: null,
+            };
             if (response) {
                 if (!response.error) {
                     const timestamp = response.start_time;
@@ -838,83 +384,57 @@
                     const gamemode = formatGameMode(response.lobby_type, response.game_mode);
                     const duration = formatDuration(response.duration);
 
-                    let players = response.players.filter((p) => nameList.indexOf(p.personaname) >= 0);
-                    let player = players.length === 1 ? players[0] : null;
+                    derived_data["date_string"] = date_string;
+                    derived_data["gamemode"] = gamemode;
+                    derived_data["duration"] = duration;
+                    derived_data["data"] = apiData;
+
+                    // finding who you are int his match
+                    let player = null;
+                    // match account id
+                    if (!player) {
+                        let filtered_players = response.players.filter((p) => nameList.indexOf(`account:${p.account_id}`) >= 0);
+                        if (filtered_players.length === 1) player = filtered_players[0];
+                    }
+                    // match name
+                    if (!player) {
+                        let filtered_players = response.players.filter((p) => nameList.indexOf(`${p.personaname}`) >= 0);
+                        if (filtered_players.length === 1) player = filtered_players[0];
+                        if (player) {
+                            if (nameList.filter(n => n.startsWith("account:")).length === 0) {
+                                addName([`account:${player.account_id}`]);
+                            }
+                        }
+                    }
+                    // match specific slot
+                    if (!player) {
+                        let filtered_players = response.players.filter((p) => nameList.indexOf(`match:${p.match_id}:${p.player_slot}`) >= 0);
+                        if (filtered_players.length === 1) player = filtered_players[0];
+                    }
 
                     if (player) {
                         const hero_id = player.hero_id;
-                        const hero_img = getHeroImageUrl(hero_id);
-                        const score_k = player.kills;
-                        const score_d = player.deaths;
-                        const score_a = player.assists;
-                        const outcome = player.win;
-                        setGameData({
-                            date_string,
-                            outcome,
-                            gamemode,
-                            duration,
-                            score_k,
-                            score_d,
-                            score_a,
-                            hero_img,
-                            player: player,
-                            data: apiData,
-                        })
+                        derived_data["hero_img"] = getHeroImageUrl(hero_id);
+                        derived_data["score_k"] = player.kills;
+                        derived_data["score_d"] = player.deaths;
+                        derived_data["score_a"] = player.assists;
+                        derived_data["outcome"] = player.win;
+                        derived_data["player"] = player;
                     } else {
-                        setGameData({
-                            date_string,
-                            outcome: "",
-                            gamemode,
-                            duration,
-                            score_k: "-",
-                            score_d: "-",
-                            score_a: "-",
-                            hero_img: "http://via.placeholder.com/127x71?text=%3F%3F",
-                            player: null,
-                            data: apiData,
-                        })
+                        derived_data["hero_img"] = "http://via.placeholder.com/127x71?text=%3F%3F";
                     }
                 } else {
-                    setGameData({
-                        date_string: "Error OpenDota match not found",
-                        outcome: "",
-                        gamemode: "",
-                        duration: "",
-                        score_k: "-",
-                        score_d: "-",
-                        score_a: "-",
-                        hero_img: "http://via.placeholder.com/127x71?text=404",
-                        player: -1,
-                        data: null,
-                    })
+                    derived_data["date_string"] = "Error OpenDota match not found";
+                    derived_data["hero_img"] = "http://via.placeholder.com/127x71?text=404";
                 }
             } else if (response === false) {
-                setGameData({
-                    date_string: "Loading...",
-                    outcome: "",
-                    gamemode: "",
-                    duration: "",
-                    score_k: "-",
-                    score_d: "-",
-                    score_a: "-",
-                    hero_img: "http://via.placeholder.com/127x71?text=...",
-                    player: -1,
-                    data: null,
-                })
+                derived_data["date_string"] = "Loading...";
+                derived_data["hero_img"] = "http://via.placeholder.com/127x71?text=...";
             } else {
-                setGameData({
-                    date_string: "Error OpenDota not responding",
-                    outcome: "",
-                    gamemode: "",
-                    duration: "",
-                    score_k: "-",
-                    score_d: "-",
-                    score_a: "-",
-                    hero_img: "http://via.placeholder.com/127x71?text=Error",
-                    player: -1,
-                    data: null,
-                })
+                derived_data["date_string"] = "Error OpenDota not responding";
+                derived_data["hero_img"] = "http://via.placeholder.com/127x71?text=Error";
             }
+            setGameData(derived_data);
         }, [apiData, nameList]);
 
         const {
@@ -937,28 +457,6 @@
         } else if (filterOutcome === "lose") {
             if (outcome === "" || !!outcome) is_hidden = true
         }
-
-        let hasCommend = false;
-        let hasReport = false;
-
-        records.forEach((record) => {
-            const {
-                report_comm,
-                report_abi,
-                report_feed,
-                commend_teach,
-                commend_lead,
-                commend_friend,
-                commend_forgive,
-            } = record;
-
-            if (commend_forgive || commend_friend || commend_teach || commend_lead) {
-                hasCommend = true;
-                return;
-            }
-
-            hasReport = true;
-        });
 
         if (filterCommend && !hasCommend) {
             is_hidden = true;
@@ -1015,13 +513,22 @@
                                     const hero_img = getHeroImageUrl(p.hero_id);
                                     return (
                                         <li>
-                                            <img className="mr-1 mb-1" src={hero_img} height="15"/>
                                             <a href={"#"} onClick={(e) => {
                                                 e.preventDefault();
+                                                let nameToAdd = [
+                                                    `match:${p.match_id}:${p.player_slot}`
+                                                ];
                                                 if (p.personaname) {
-                                                    addName(p.personaname);
+                                                    nameToAdd.push(p.personaname);
                                                 }
-                                            }}>{p.personaname || "Unidentified"}</a>
+                                                if (p.account_id) {
+                                                    nameToAdd.push(`account:${p.account_id}`);
+                                                }
+                                                addName(nameToAdd);
+                                            }}>
+                                                <img className="mr-1 mb-1" src={hero_img} height="15"/>
+                                                {p.personaname || "Unidentified"}
+                                            </a>
                                         </li>
                                     );
                                 })}
@@ -1045,8 +552,8 @@
 
         const [nameList, setNameList] = useState([name]);
 
-        const addName = useCallback((n) => {
-            setNameList([...nameList, n]);
+        const addName = useCallback((appendList) => {
+            setNameList([...nameList, ...appendList]);
         }, [nameList]);
 
         const records = data.slice(1).map(row => {
@@ -1088,6 +595,29 @@
                     row,
                 ],
             });
+        });
+        matches = matches.map((match) => {
+            let hasCommend = false;
+            let hasReport = false;
+            match.records.forEach((record) => {
+                const {
+                    commend_teach,
+                    commend_lead,
+                    commend_friend,
+                    commend_forgive,
+                } = record;
+                if (commend_forgive || commend_friend || commend_teach || commend_lead) {
+                    hasCommend = true;
+                    return;
+                }
+                // if not commend, it's reported of some kind
+                hasReport = true;
+            });
+            return {
+                ...match,
+                hasCommend,
+                hasReport,
+            }
         });
 
         return (
@@ -1194,8 +724,12 @@
                                         target="_blank">https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming</a>
                                     </li>
                                     <li>
-                                        <div>In URL bar, Type <code>javascript:</code> and paste the following script afterward, then press
-                                            Enter
+                                        <div>In URL bar, Type <code>javascript:</code> <span style={{color: "#ffdf32"}}>DO NOT PRESS ENTER YET</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            and paste the following script after <code>javascript:</code>, then press Enter
                                         </div>
                                         <textarea
                                             id="script_box"
