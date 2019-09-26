@@ -42,6 +42,10 @@
             border: 3px solid floralwhite;
         }
 
+        #how_to_use li {
+            margin-bottom: 10px;
+        }
+
         #filter_title {
             margin-top: 4px;
         }
@@ -281,7 +285,7 @@
 
         if (!report_comm && !report_abi && !report_feed) {
             let guessedType = "wrong_role"
-            if (timestamp === "-") {
+            if (!timestamp || timestamp === "-") {
                 // no timestamp yet, assume wrong rank
                 guessedType = "wrong_role";
             } else {
@@ -326,7 +330,7 @@
         const hero = heroes_map[hero_id];
         let hero_img = "";
         if (!hero) {
-            hero_img = "http://via.placeholder.com/127x71?text=%3F%3F%3F%3F";
+            hero_img = "https://via.placeholder.com/127x71?text=%3F%3F%3F%3F";
         } else {
             const hero_name = hero.name;
             hero_img = `http://cdn.dota2.com/apps/dota2/images/heroes/${hero_name}_hphover.png`;
@@ -353,7 +357,8 @@
             gamemode: "",
             duration: "",
             date_string: "Loading...",
-            hero_img: "http://via.placeholder.com/127x71?text=...",
+            date: null,
+            hero_img: "https://via.placeholder.com/127x71?text=...",
             score_k: "-",
             score_d: "-",
             score_a: "-",
@@ -365,13 +370,14 @@
             const response = apiData;
             let derived_data = {
                 date_string: "Error OpenDota not responding",
+                date: null,
                 outcome: "",
                 gamemode: "",
                 duration: "",
                 score_k: "-",
                 score_d: "-",
                 score_a: "-",
-                hero_img: "http://via.placeholder.com/127x71?text=Error",
+                hero_img: "https://via.placeholder.com/127x71?text=Error",
                 player: null,
                 data: null,
             };
@@ -384,6 +390,7 @@
                     const gamemode = formatGameMode(response.lobby_type, response.game_mode);
                     const duration = formatDuration(response.duration);
 
+                    derived_data["date"] = date_obj;
                     derived_data["date_string"] = date_string;
                     derived_data["gamemode"] = gamemode;
                     derived_data["duration"] = duration;
@@ -421,18 +428,18 @@
                         derived_data["outcome"] = player.win;
                         derived_data["player"] = player;
                     } else {
-                        derived_data["hero_img"] = "http://via.placeholder.com/127x71?text=%3F%3F";
+                        derived_data["hero_img"] = "https://via.placeholder.com/127x71?text=%3F%3F";
                     }
                 } else {
                     derived_data["date_string"] = "Error OpenDota match not found";
-                    derived_data["hero_img"] = "http://via.placeholder.com/127x71?text=404";
+                    derived_data["hero_img"] = "https://via.placeholder.com/127x71?text=404";
                 }
             } else if (response === false) {
                 derived_data["date_string"] = "Loading...";
-                derived_data["hero_img"] = "http://via.placeholder.com/127x71?text=...";
+                derived_data["hero_img"] = "https://via.placeholder.com/127x71?text=...";
             } else {
                 derived_data["date_string"] = "Error OpenDota not responding";
-                derived_data["hero_img"] = "http://via.placeholder.com/127x71?text=Error";
+                derived_data["hero_img"] = "https://via.placeholder.com/127x71?text=Error";
             }
             setGameData(derived_data);
         }, [apiData, nameList]);
@@ -441,6 +448,7 @@
             outcome,
             gamemode,
             duration,
+            date,
             date_string,
             hero_img,
             score_k,
@@ -501,7 +509,7 @@
                     {records.map((record, i) => (
                         <Fragment key={i}>
                             {i !== 0 ? (<hr/>) : null}
-                            <ReportRow mode={gamemode} timestamp={date_string} record={record}/>
+                            <ReportRow mode={gamemode} timestamp={date} record={record}/>
                         </Fragment>
                     ))}
                     {(!!data && !player) ? (
@@ -548,7 +556,7 @@
 
         const raw_data = location.hash.substring(1);
         const data = raw_data.split(",");
-        const name = decodeURI(data[0]);
+        const name = decodeURIComponent(data[0]);
 
         const [nameList, setNameList] = useState([name]);
 
@@ -558,7 +566,8 @@
 
         const records = data.slice(1).map(row => {
             if (!row) return null;
-            const parsed_row = [row.split("-")[0], ...row.split("-")[1].split("")];
+            const splitted_row = row.split("-");
+            const parsed_row = [splitted_row[0], ...splitted_row[1].split("")];
             const match_id = parsed_row[0];
             if (isNaN(parseInt(match_id))) return null;
 
@@ -569,8 +578,12 @@
             const commend_teach = parsed_row[6] === "1";
             const commend_friend = parsed_row[7] === "1";
             const commend_forgive = parsed_row[8] === "1";
+
+            const timestamp = splitted_row[2] ? parseInt(splitted_row[2]) : 0;
+
             return {
                 match_id,
+                timestamp,
                 report_comm,
                 report_abi,
                 report_feed,
@@ -717,7 +730,7 @@
                         <div className="card">
                             <div className="card-body">
                                 <h3>How to use</h3>
-                                <ol>
+                                <ol id="how_to_use">
                                     <li>
                                         Open link <a
                                         href="https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming"
@@ -735,8 +748,9 @@
                                             id="script_box"
                                             className="form-control"
                                             readOnly
-                                            style={{color: "white"}}
-                                            value={'(()=>{const a=()=>{const n=document.getElementsByClassName("profile_small_header_name")[0].children[0].textContent,o=document.getElementById("personaldata_elements_container").querySelectorAll("tr"),p=["Yes","\\u0414\\u0430","Ano","Ja","Kyll\\xE4","Oui","\\u039D\\u03B1\\u03B9","Igen","S\\xEC","\\u306F\\u3044","\\uC608","Tak","Sim","Da","\\u662F","S\\xED","\\u0E43\\u0E0A\\u0E48","Evet","\\u0422\\u0430\\u043A"];let q=n+",";for(let r=1;r<o.length;r++){const s=o[r].querySelectorAll("td");let t="";for(let u=0;u<s.length;u++)t+=0===u?s[u].textContent+"-":-1===p.indexOf(s[u].textContent)?"0":"1";q+=t+","}window.location="https://illuminate.dotasphere.com/#"+q},b=document.getElementById("load_more_button"),c=document.getElementById("inventory_history_loading"),d=()=>{return b&&"none"!==b.style.display||c&&"none"!==c.style.display},e=()=>b&&"none"!==b.style.display,f=()=>b.click(),h=document.getElementById("personaldata_elements_container"),k=document.createElement("h1"),l=document.createTextNode("Loading more data "),m=document.createElement("img");m.src="https://steamcommunity-a.akamaihd.net/public/images/login/throbber.gif",k.appendChild(l),k.appendChild(m),h.insertBefore(k,h.childNodes[0]),(()=>{const n=setInterval(()=>{e()?f():!d()&&(clearInterval(n),console.log(`done`),a())},100)})()})()'}
+                                            style={{color: "white", wordBreak: "break-all"}}
+                                            rows="11"
+                                            value={'(()=>{const a=()=>{const a=document.getElementsByClassName("profile_small_header_name")[0].children[0].textContent,b=document.getElementById("personaldata_elements_container").querySelectorAll("tr"),c=["Yes","\\u0414\\u0430","Ano","Ja","Kyll\\xE4","Oui","\\u039D\\u03B1\\u03B9","Igen","S\\xEC","\\u306F\\u3044","\\uC608","Tak","Sim","Da","\\u662F","S\\xED","\\u0E43\\u0E0A\\u0E48","Evet","\\u0422\\u0430\\u043A"];let d=encodeURIComponent(a)+",";for(let a=1;a<b.length;a++){const e=b[a].querySelectorAll("td");if(0===e.length)continue;let f="";f+=e[0].textContent+"-0";for(let a=2;a<e.length;a++)f+=-1===c.indexOf(e[a].textContent)?"0":"1";f+="-"+e[1].textContent,d+=f+","}window.location="https://illuminate.dotasphere.com/#"+d};(()=>{const b=document.getElementById("load_more_button"),c=document.getElementById("inventory_history_loading"),d=()=>b&&"none"!==b.style.display||c&&"none"!==c.style.display,e=()=>b&&"none"!==b.style.display,f=()=>b.click(),g=document.getElementById("personaldata_elements_container");if(!g)return alert("Data table not found, make sure you are on steam GDPR page");const h=document.createElement("h1"),i=document.createTextNode("Loading more data "),j=document.createElement("img");j.src="https://steamcommunity-a.akamaihd.net/public/images/login/throbber.gif",h.appendChild(i),h.appendChild(j),g.insertBefore(h,g.childNodes[0]),(()=>{const b=setInterval(()=>{e()?f():!d()&&(clearInterval(b),console.log("done"),a())},100)})()})()})();'}
                                         />
                                         <div>If you're not comfortable using compressed script, visit <a
                                             href="https://github.com/bongikairu/illuminate">https://github.com/bongikairu/illuminate</a> for
@@ -764,14 +778,16 @@
 
                 <div className="mt-3">
                     <h3>Development</h3>
-                    <span>If you're interested in helping, or found a bug, open as issue/mr on <a
-                        href="https://github.com/bongikairu/illuminate">https://github.com/bongikairu/illuminate</a></span>
+                    <span>
+                        If you're interested in helping, or found a bug, open an issue or submit a merge request on
+                        <a href="https://github.com/bongikairu/illuminate" className="ml-1">https://github.com/bongikairu/illuminate</a>
+                    </span>
                 </div>
 
                 <hr/>
 
                 <div className="mt-3 text-center text-muted">
-                    <div>DOTA 2 Illuminate v2.0.0</div>
+                    <div>DOTA 2 Illuminate v2.0.1</div>
                     <div>Automatic Dota 2 Reported Match Data Linker</div>
                     <div>Created by <a href="https://github.com/bongikairu">@bongikairu</a></div>
                     <div>Powered by <a href="https://docs.opendota.com/">OpenDota API</a></div>
