@@ -1,0 +1,125 @@
+body {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+#logo {
+    float: left;
+    margin-right: 1rem;
+    height: 94px;
+    border-radius: 1rem;
+    border: 3px solid floralwhite;
+}
+
+.how_to_use li {
+    margin-bottom: 10px;
+}
+
+.browser_icon {
+    height: 1em;
+}
+
+.sample_image {
+    height: 3em;
+}
+
+#filter_title {
+    margin-top: 4px;
+}
+
+td.match {
+    width: 16em;
+}
+
+td.icon {
+    width: 7em;
+}
+
+.table th, .table td {
+    border-top: 1px solid #dee2e642;
+}
+
+.card {
+    /* Background pattern from Toptal Subtle Patterns https://www.toptal.com/designers/subtlepatterns/blach-orchid/ */
+    background: #1c2127 url(images/blackorchid.png) repeat;
+}
+
+a.opendota {
+    text-decoration: none !important;
+    font-weight: bolder;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Droid Sans", Ubuntu, Cantarell, "Fira Sans", Helvetica, Arial, sans-serif;
+}
+
+a.dotabuff {
+    text-decoration: none !important;
+    background: red;
+    font-weight: bold;
+    padding: 0 2px;
+}
+
+a.stratz {
+    text-decoration: none !important;
+    font-weight: bold;
+    padding: 0 2px;
+    color: #78DAEB;
+}
+
+.win {
+    color: #5cb85c;
+}
+
+.lose {
+    color: #d9534f;
+}
+
+.score_k {
+    color: #5cb85c;
+}
+
+.score_d {
+    color: #d9534f;
+}
+
+.score_a {
+    color: #f0ad4e;
+}
+
+.kda_spacer {
+    margin: 0 4px;
+}
+
+.commend {
+    color: #5cb85c;
+    display: block;
+}
+
+.report {
+    color: #d9534f;
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+.commend .svg-inline--fa, .report .svg-inline--fa {
+    margin-right: 0.3em;
+}
+
+td.summary {
+    padding-bottom: 2rem;
+}
+
+.summary hr {
+    margin: 0.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.untagged_description {
+    font-size: 0.6em;
+    color: #aaaaaa;
+}
+
+#rip {
+    font-size: 0.3em;
+}
