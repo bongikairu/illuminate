@@ -612,7 +612,7 @@ const App = () => {
                                         </a>
                                         {" or "}
                                         <a href={"https://addons.mozilla.org/en-US/firefox/addon/chakra-magic/"} target="_blank">
-                                            <img className="browser_icon" alt={"Mozilla Firefox Icon"} src={"images/firefox_icon.png"}/> Mozilla Firefox
+                                            <img className="browser_icon" alt={"Mozilla Firefox Icon"} src={"images/firefox_icon.png"}/> Mozilla Firefox (Coming Soon)
                                         </a>
                                     </div>
                                 </li>
