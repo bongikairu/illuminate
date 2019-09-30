@@ -1,32 +1,39 @@
-# DOTA 2 Illuminate
-Automatic Dota 2 Reported Match Data Linker
+# [![](/favicon-32x32.png) Illuminate](https://illuminate.dotasphere.com/) | A Dota 2 Match Report Data Linker
 
-[https://illuminate.dotasphere.com/](https://illuminate.dotasphere.com/)
+[![](https://img.shields.io/badge/discord-join-7289da)](https://discord.gg/2mBefy)
 
-Found a bug? [Report it here](https://github.com/bongikairu/illuminate/issues) or on [our new discord](https://discord.gg/x5QHsVV)
+Found a bug in the website? Have a question? Please [open an issue](https://github.com/bongikairu/illuminate/issues)!
 
-### Browser Extension
-
-For problem/suggestion related to Browser Extension, please visit [https://github.com/Steffo99/chakra-magic](https://github.com/Steffo99/chakra-magic)
+For questions about the Firefox Addon, please visit the [chakra-magic project page](https://github.com/Steffo99/chakra-magic).
 
 ## About
 
-Illuminate is a tool that help you browse through a newly revealed report/commendation data that valve exposed due to EU GDPR regulation. Data in its raw form is not hard to read but might be tiresome to go through. Illuminate fill that gap by automatically fetching matches data for you. This tool is powered mainly by OpenDota API and did everything client-side. That means no data is event transferred to us and is only yours to see.
+Illuminate is a tool to help you browse the report/commendation data exposted by Valve in response to the EU GDPR.
 
-## The Script
+In its raw form, the data is messy and while reading it you might need to cross-reference a match history tool such as [OpenDota](https://github.com/odota) to fully understand it.
 
-The script and extension works by collecting data and send it to display on Illuminate webpage. It can only read what is on the page so you'll need to login and navigate to that page yourselves. After that, data is packed and you'll be redirect to Illuminate webpage. It will then fetch every match data from [OpenDota API](https://docs.opendota.com/) directly from your browser. We stored none of your report data, only visitation info (where you're from, which browser do you use, etc) using Google Analytic.
+Illuminate fills that gap by automatically combining the report data with match data sourced from the [OpenDota API](https://docs.opendota.com/), allowing for an easier understanding.
+
+Everything Illuminate does is entirely client-side: no data is sent to the server; everything is processed right in your browser!
+
+## Technical details
+
+Illuminate works in two steps:
+- First, Illuminate gathers data from the GDPR page, and passes it to the static page through the anchor URL segment. ([console_script.js](/console_script.js))
+- Then, the data is read and displayed to the user by the script on the static page, and the match infos are fetched through the OpenDota API. ([script.js](/script.js))
 
 ## Contribution
 
-You're welcome to make a bug report or create a merge request. There's currently no guideline in place but make sure you include as much data as possible so problem can be easily identified.
+You're welcome to open issues or create pull requests.
 
-## License
+Currently, there are no guidelines in place; make sure to be as detailed as possible, so the problem can be more quickly identified and fixed.
 
-DOTA 2 Illuminate is a community tool and is not affiliated with DOTA 2 or Valve.
-All DOTA 2 assets are property of Valve and its used only to represent game data.
+## Licensing
 
-DOTA 2 Illuminate scripts and website are licensed under MIT License.
-Please refers to LICENSE for more info.
+Illuminate is licensed under the [MIT License](/license).
 
-DOTA 2 Illuminate uses licensed Font Awesome Pro Icon Pack.
+Illuminate is a community tool and is not affiliated with Dota 2 or Valve Corporation.
+
+All Dota 2 assets are property of Valve Corporation.
+
+Illuminate uses a licensed copy of the Font Awesome Pro Icon Pack.
