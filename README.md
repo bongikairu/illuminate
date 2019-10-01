@@ -1,4 +1,4 @@
-# [![](/favicon-32x32.png) Illuminate](https://illuminate.dotasphere.com/) | A Dota 2 Match Report Data Linker
+# [![](/resources/favicon-32x32.png) Illuminate](https://illuminate.dotasphere.com/) | A Dota 2 Match Report Data Linker
 
 [![](https://img.shields.io/badge/discord-join-7289da)](https://discord.gg/2mBefy)
 
