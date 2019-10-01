@@ -41,7 +41,7 @@ td.icon {
 
 .card {
     /* Background pattern from Toptal Subtle Patterns https://www.toptal.com/designers/subtlepatterns/blach-orchid/ */
-    background: #1c2127 url(images/blackorchid.png) repeat;
+    background: #1c2127 url(../images/blackorchid.png) repeat;
 }
 
 a.opendota {
@@ -122,4 +122,8 @@ td.summary {
 
 #rip {
     font-size: 0.3em;
+}
+
+.cc-revoke {
+    display: none;
 }

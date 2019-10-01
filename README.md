@@ -20,7 +20,7 @@ Everything Illuminate does is entirely client-side: no data is sent to the serve
 
 Illuminate works in two steps:
 - First, Illuminate gathers data from the GDPR page, and passes it to the static page through the anchor URL segment. ([console_script.js](/console_script.js))
-- Then, the data is read and displayed to the user by the script on the static page, and the match infos are fetched through the OpenDota API. ([script.js](/script.js))
+- Then, the data is read and displayed to the user by the script on the static page, and the match infos are fetched through the OpenDota API. ([resources/script.js](/resources/script.js))
 
 ## Contribution
 

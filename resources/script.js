@@ -612,7 +612,7 @@ const App = () => {
                                         </a>
                                         {" or "}
                                         <a href={"https://addons.mozilla.org/en-US/firefox/addon/chakra-magic/"} target="_blank">
-                                            <img className="browser_icon" alt={"Mozilla Firefox Icon"} src={"images/firefox_icon.png"}/> Mozilla Firefox (Coming Soon)
+                                            <img className="browser_icon" alt={"Mozilla Firefox Icon"} src={"images/firefox_icon.png"}/> Mozilla Firefox
                                         </a>
                                     </div>
                                 </li>
@@ -692,6 +692,9 @@ const App = () => {
                     means no data is event transferred to us and is only yours to see. Google Analytics,
                     however, will keep an anonymous record of your visit for analytical use.
                 </div>
+                <div>
+                    <a href={"pp.html"}>Read full Privacy Policy</a>
+                </div>
             </div>
 
             <div className="mt-3">
@@ -708,7 +711,7 @@ const App = () => {
             <hr/>
 
             <div className="mt-3 text-center text-muted">
-                <div>DOTA 2 Illuminate v2.1.0</div>
+                <div>DOTA 2 Illuminate v2.2.0</div>
                 <div>Automatic Dota 2 Reported Match Data Linker</div>
                 <div>Created by <a href="https://github.com/bongikairu">@bongikairu</a></div>
                 <div>Powered by <a href="https://docs.opendota.com/">OpenDota API</a></div>
