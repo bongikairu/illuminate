@@ -227,7 +227,7 @@ const MatchCard = ({match, nameList, addName, filterOutcome, filterCommend, filt
     useEffect(() => {
         const response = apiData;
         let derived_data = {
-            date_string: "Error OpenDota not responding",
+            date_string: "Error: OpenDota not responding",
             date: null,
             outcome: "",
             gamemode: "",
@@ -289,14 +289,14 @@ const MatchCard = ({match, nameList, addName, filterOutcome, filterCommend, filt
                     derived_data["hero_img"] = "images/match_status/hero_status_unknown.png";
                 }
             } else {
-                derived_data["date_string"] = "Error OpenDota match not found";
+                derived_data["date_string"] = "Error: OpenDota match not found";
                 derived_data["hero_img"] = "images/match_status/hero_status_404.png";
             }
         } else if (response === false) {
             derived_data["date_string"] = "Loading...";
             derived_data["hero_img"] = "images/match_status/hero_status_loading.png";
         } else {
-            derived_data["date_string"] = "Error OpenDota not responding";
+            derived_data["date_string"] = "Error: OpenDota not responding";
             derived_data["hero_img"] = "images/match_status/hero_status_error.png";
         }
         setGameData(derived_data);
@@ -373,7 +373,7 @@ const MatchCard = ({match, nameList, addName, filterOutcome, filterCommend, filt
                 {(!!data && !player) ? (
                     <Fragment>
                         <hr/>
-                        <span className="untagged_title">We're not sure who you're in this match</span>
+                        <span className="untagged_title">We're not sure who you are in this match:</span>
                         <ul>
                             {data.players.map((p) => {
                                 const hero_img = getHeroImageUrl(p.hero_id);
@@ -399,7 +399,7 @@ const MatchCard = ({match, nameList, addName, filterOutcome, filterCommend, filt
                                 );
                             })}
                         </ul>
-                        <span className="untagged_description">Click on your name to tag, if your name is not shown, you may need to expose your match data</span>
+                        <span className="untagged_description">Please click on your name to view the match info. If your name is not displayed, you may need to <a href="https://purgegamers.true.io/art/how-to-load-all-match-data-in-dotabuff/">enable the Expose Public Match Data setting</a>.</span>
                     </Fragment>
                 ) : null}
             </td>
@@ -506,7 +506,7 @@ const OutputCard = () => {
             <div className="card">
                 <div className="card-body">
                     <div className="card-title float-left" id="output_title">
-                        <h2>{name}'s reported data</h2>
+                        <h2>{name}'s Commend/Report Data</h2>
                     </div>
                     <div className="float-right">
                         <div className="btn-group btn-group-toggle" data-toggle="buttons">
@@ -574,8 +574,8 @@ const App = () => {
         <Fragment>
             <img id="logo" src="images/illuminate_logo.png" alt="Illuminate Logo"/>
             <div>
-                <h1>DOTA 2 Illuminate</h1>
-                <h2>See which games you get reported</h2>
+                <h1>Illuminate</h1>
+                <h2>See what Dota 2 matches you get commended and reported in</h2>
             </div>
 
             <hr/>
@@ -586,12 +586,15 @@ const App = () => {
 
             {!isOutputMode ? (
                 <div id="whatis">
-                    <h3>What is this?</h3>
-                    Illuminate is a tool that help you browse through a newly revealed report/commendation
-                    data that valve exposed due to EU GDPR regulation. Data in its raw form is not hard to read
-                    but might be tiresome to go through. Illuminate fill that gap by automatically fetching matches
-                    data for you. This tool is powered mainly by OpenDota API and did everything client-side. That
-                    means no data is event transferred to us and is only yours to see.
+                    <h3>What is Illuminate?</h3>
+                    <div>Illuminate is a tool that parses the Dota 2 GDPR data and displays what matches you get 
+                    commended or reported in, along with stats for the relevant matches.</div>
+                    <h3>Is my commend/report history sent to a server?</h3>
+                    <div>No. All GDPR data is stored and processed on your browser, and is never sent to any
+                    remote server.</div>
+                    <h3>Where do you get the public match data from?</h3>
+                    <div>All match data is sourced from <a href="https://www.opendota.com/">OpenDota</a>; if it 
+                    doesn't appear, please check that your matches are displayed there!</div>
                 </div>
             ) : null}
 
@@ -599,66 +602,67 @@ const App = () => {
                 <div id="instruction" className="mt-3">
                     <div className="card">
                         <div className="card-body">
-                            <h3><i class="far fa-clipboard-list"></i> How to use</h3>
+                            <h3><i className="far fa-clipboard-list"></i> How to use</h3>
 
                             <ol className="how_to_use">
                                 <li>
-                                    Install Extension
+                                    Install our extension:
                                     <br/>
                                     <div className="m-3">
-                                        {"Install on "}
+                                        {"Available for "}
                                         <a href={"https://chrome.google.com/webstore/detail/chakra-magic/ldamnagiplkkoeolomjiigkfaobbecbo"} target="_blank">
                                             <img className="browser_icon" alt={"Google Chrome Icon"} src={"images/chrome_icon.png"}/> Google Chrome
                                         </a>
-                                        {" or "}
+                                        {" and "}
                                         <a href={"https://addons.mozilla.org/en-US/firefox/addon/chakra-magic/"} target="_blank">
                                             <img className="browser_icon" alt={"Mozilla Firefox Icon"} src={"images/firefox_icon.png"}/> Mozilla Firefox
                                         </a>
                                     </div>
                                 </li>
                                 <li>
-                                    Click on Extension Icon
+                                    Click on the <i>Chakra Magic</i> icon:
                                     <br/>
                                     <img className="sample_image" alt={"Example image of extension icon location"} src={"images/extension_icon_example.png"}/>
                                     <br/>
-                                    <span className="text-warning">It may be hidden, click on the right-most button to show all extension installed</span>
+                                    <span className="text-warning">If you have many extensions, it may be hidden: in that case, click on the rightmost button to see all installed extensions.</span>
                                 </li>
                                 <li>
-                                    Click on Illuminate Icon
+                                    Click on the <i>Illuminate</i> icon:
                                     <br/>
                                     <img className="sample_image" alt={"Example image of in-page icon location"} src={"images/inpage_icon_example.png"}/>
                                 </li>
                                 <li>
-                                    Wait until data is loaded, that's all <i className="far fa-laugh-wink"></i>
+                                    Wait until the data finishes loading <i className="far fa-laugh-wink"></i>
+                                    <br/>
+                                    <img className="sample_image" alt={"Example image of in-page icon location"} src={"images/inpage_loading_example.png"}/>
                                 </li>
                             </ol>
 
                             <div className="mb-3">
-                                If you don't want to use an extension,
+                                If you don't want to use the extension, or you are using an unsupported browser, you can&nbsp;
                                 <a href={"#"} onClick={(e) => {
                                     e.preventDefault();
                                     setShowManualInstruction(true);
                                 }}>
-                                    {" use this manual run instruction"}
-                                </a>
+                                    {"run the fetch script manually"}
+                                </a>.
                             </div>
 
                             {showManualInstruction ? (
                                 <Fragment>
-                                    <h3>How to use (Manual Run)</h3>
+                                    <h3>Manually fetching the data</h3>
                                     <ol className="how_to_use">
                                         <li>
-                                            Open link <a
+                                            Open <a
                                             href="https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming"
-                                            target="_blank">https://steamcommunity.com/my/gcpd/570/?category=Account&tab=MatchPlayerReportIncoming</a>
+                                            target="_blank">this page</a>.
                                         </li>
                                         <li>
-                                            <div>In URL bar, Type <code>javascript:</code> <span style={{color: "#ffdf32"}}>DO NOT PRESS ENTER YET</span>
-                                            </div>
+                                            Press <code>Ctrl+Shift+K</code> to open the Developer Console.
                                         </li>
                                         <li>
                                             <div>
-                                                and paste the following script after <code>javascript:</code>, then press Enter
+                                                Copy the following code, then paste it in the developer console and press Enter.
                                             </div>
                                             <textarea
                                                 id="script_box"
@@ -668,16 +672,14 @@ const App = () => {
                                                 rows="11"
                                                 value={'(()=>{const a=()=>{const a=document.getElementsByClassName("profile_small_header_name")[0].children[0].textContent,b=document.getElementById("personaldata_elements_container").querySelectorAll("tr"),c=["Yes","\\u0414\\u0430","Ano","Ja","Kyll\\xE4","Oui","\\u039D\\u03B1\\u03B9","Igen","S\\xEC","\\u306F\\u3044","\\uC608","Tak","Sim","Da","\\u662F","S\\xED","\\u0E43\\u0E0A\\u0E48","Evet","\\u0422\\u0430\\u043A"];let d=encodeURIComponent(a)+",";for(let a=1;a<b.length;a++){const e=b[a].querySelectorAll("td");if(0===e.length)continue;let f="";f+=e[0].textContent+"-"+e[1].textContent+"-";for(let a=2;a<e.length;a++)f+=-1===c.indexOf(e[a].textContent)?"0":"1";d+=f+","}window.location="https://illuminate.dotasphere.com/#"+d};(()=>{const b=document.getElementById("load_more_button"),c=document.getElementById("inventory_history_loading"),d=()=>b&&"none"!==b.style.display||c&&"none"!==c.style.display,e=()=>b&&"none"!==b.style.display,f=()=>b.click(),g=document.getElementById("personaldata_elements_container");if(!g)return alert("Data table not found, make sure you are on steam GDPR page");const h=document.createElement("h1"),i=document.createTextNode("Loading more data "),j=document.createElement("img");j.src="https://steamcommunity-a.akamaihd.net/public/images/login/throbber.gif",h.appendChild(i),h.appendChild(j),g.insertBefore(h,g.childNodes[0]),(()=>{const b=setInterval(()=>{e()?f():!d()&&(clearInterval(b),console.log("done"),a())},100)})()})()})();'}
                                             />
-                                            <div>If you're not comfortable using compressed script, visit <a
-                                                href="https://github.com/bongikairu/illuminate">https://github.com/bongikairu/illuminate</a> for
-                                                full version
+                                            <div>If you don't want to use a minified script, you can use <a
+                                                href="https://github.com/bongikairu/illuminate/blob/master/console_script.js">the full version available on GitHub</a>.
                                             </div>
                                         </li>
                                         <li>
-                                            Wait until data is loaded, that's all
+                                            Wait until the data finishes loading <i className="far fa-laugh-wink"></i>
                                         </li>
                                     </ol>
-                                    <span className="text-warning">Note: If you're using Firefox, you'll need to paste the code in scratchpad or console instead.</span>
                                 </Fragment>
                             ) : null}
                         </div>
@@ -688,37 +690,33 @@ const App = () => {
             <div className="mt-3">
                 <h3>Privacy Policy</h3>
                 <div>
-                    This tool is powered mainly by OpenDota API and did everything client-side. That
-                    means no data is event transferred to us and is only yours to see. Google Analytics,
-                    however, will keep an anonymous record of your visit for analytical use.
+                    Illuminate does everything client-side: it passes commend/report data through the URL anchor, and fetches match data locally through the OpenDota API.<br></br>
+                    However, Google Analytics is present on the page, and it will send some anonymous data to Google to help us improve the website.
                 </div>
                 <div>
-                    <a href={"pp.html"}>Read full Privacy Policy</a>
+                    <a href={"pp.html"}>Read our Privacy Policy</a>
                 </div>
             </div>
 
             <div className="mt-3">
                 <h3>Development</h3>
-                <span>
-                        If you're interested in helping, or found a bug,
-                        <br/>
-                        visit <a href="https://github.com/bongikairu/illuminate" className="ml-1"><i className="fab fa-github"></i> https://github.com/bongikairu/illuminate</a>
-                        <br/>
-                        or join <a href={"https://discord.gg/x5QHsVV"}><i className="fab fa-discord"></i> our discord server</a>
-                    </span>
+                <div>
+                    If you have found a bug, or want to help improve this project, please visit&nbsp;
+                    <a href="https://github.com/bongikairu/illuminate" className="ml-1"><i className="fab fa-github"></i>&nbsp;the GitHub project page</a>&nbsp;
+                    or join <a href="https://discord.gg/x5QHsVV"><i className="fab fa-discord"></i>&nbsp;our Discord server</a>.
+                </div>
             </div>
 
             <hr/>
 
             <div className="mt-3 text-center text-muted">
-                <div>DOTA 2 Illuminate v2.2.0</div>
-                <div>Automatic Dota 2 Reported Match Data Linker</div>
-                <div>Created by <a href="https://github.com/bongikairu">@bongikairu</a></div>
-                <div>Powered by <a href="https://docs.opendota.com/">OpenDota API</a></div>
-                <div>DOTA 2 Illuminate is a community tool and is not affiliated with DOTA 2 or Valve</div>
+                <div>Illuminate v2.2.0</div>
+                <div>A Dota 2 Match Report Data Linker</div>
+                <div>Created by <a href="https://github.com/bongikairu">bongikairu</a></div>
+                <div>Powered by the <a href="https://docs.opendota.com/">OpenDota API</a></div>
+                <div>Illuminate is a community tool and is not affiliated with Dota 2 or Valve.</div>
                 <div id="rip">RIP yearbeast and d2armory</div>
             </div>
-
         </Fragment>
     )
 };
