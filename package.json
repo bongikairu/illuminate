@@ -1,0 +1,30 @@
+{
+  "name": "illuminate",
+  "version": "2.2.0",
+  "main": "console_script.js",
+  "repository": "https://github.com/bongikairu/illuminate",
+  "author": "BongiKairu <bongikairu@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/preset-react": "^7.6.3"
+  },
+  "babel": {
+    "minified": true,
+    "comments": false,
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": "> 0.25%, not dead"
+        }
+      ],
+      "@babel/preset-react"
+    ]
+  },
+  "scripts": {
+    "build": "babel resources/script.js --out-file resources/script.min.js"
+  }
+}
