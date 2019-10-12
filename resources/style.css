@@ -19,10 +19,6 @@ body {
     height: 1em;
 }
 
-.sample_image {
-    height: 3em;
-}
-
 #filter_title {
     margin-top: 4px;
 }
@@ -126,4 +122,8 @@ td.summary {
 
 .cc-revoke {
     display: none;
+}
+
+h3 {
+    margin-top: 12px;
 }
