@@ -710,7 +710,7 @@ const App = () => {
             <hr/>
 
             <div className="mt-3 text-center text-muted">
-                <div>Illuminate v2.2.0</div>
+                <div>Illuminate v2.3.0</div>
                 <div>A Dota 2 Match Report Data Linker</div>
                 <div>Created by <a href="https://github.com/bongikairu">bongikairu</a></div>
                 <div>Powered by the <a href="https://docs.opendota.com/">OpenDota API</a></div>
