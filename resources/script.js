@@ -85,7 +85,7 @@ const worker_process = () => {
                             }, {});
                     })
                 }
-                console.log(filtered_data);
+                // console.log(filtered_data);
                 if (!filtered_data.error) {
                     try {
                         localStorage.setItem(`fullmatchdata16-${work.match_id}`, LZString.compressToUTF16(JSON.stringify(filtered_data)));
