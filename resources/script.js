@@ -58,24 +58,43 @@ const worker_process = () => {
         const work = work_queue[0];
         work_queue.shift();
 
-        const cache = localStorage.getItem(`fullmatchdata-${work.match_id}`);
+        const cache = localStorage.getItem(`fullmatchdata16-${work.match_id}`);
         if (cache) {
-            const data = JSON.parse(LZString.decompress(cache));
+            const data = JSON.parse(LZString.decompressFromUTF16(cache));
             work.resolve(data);
             setTimeout(worker_process, 100);
             return;
         }
         fetchOpenAPI(work.match_id)
             .then((data) => {
-                if (!data.error) {
+                const allowed = ['error', 'start_time', 'lobby_type', 'game_mode', 'duration', 'players'];
+                let filtered_data = Object.keys(data)
+                    .filter(key => allowed.includes(key))
+                    .reduce((obj, key) => {
+                        obj[key] = data[key];
+                        return obj;
+                    }, {});
+                if (filtered_data.players) {
+                    filtered_data.players = filtered_data.players.map(p => {
+                        const allowed = ['account_id', 'personaname', 'match_id', 'player_slot', 'hero_id', 'kills', 'deaths', 'assists', 'win'];
+                        return Object.keys(p)
+                            .filter(key => allowed.includes(key))
+                            .reduce((obj, key) => {
+                                obj[key] = p[key];
+                                return obj;
+                            }, {});
+                    })
+                }
+                console.log(filtered_data);
+                if (!filtered_data.error) {
                     try {
-                        localStorage.setItem(`fullmatchdata-${work.match_id}`, LZString.compress(JSON.stringify(data)));
+                        localStorage.setItem(`fullmatchdata16-${work.match_id}`, LZString.compressToUTF16(JSON.stringify(filtered_data)));
                     } catch (e) {
                         console.log(`Can't save data for match ${work.match_id}`, e)
                         // quota exceed
                     }
                 }
-                work.resolve(data)
+                work.resolve(filtered_data)
             })
             .catch((e) => {
                 console.log(e);
@@ -399,7 +418,12 @@ const MatchCard = ({match, nameList, addName, filterOutcome, filterCommend, filt
                                 );
                             })}
                         </ul>
-                        <span className="untagged_description">Please click on your name to view the match info. If your name is not displayed, you may need to <a href="https://purgegamers.true.io/art/how-to-load-all-match-data-in-dotabuff/">enable the Expose Public Match Data setting</a>.</span>
+                        <span className="untagged_description">
+                            {"Please click on your name to view the match info. "}
+                            {"If your name is not displayed, you may need to "}
+                            <a href="https://purgegamers.true.io/art/how-to-load-all-match-data-in-dotabuff/">enable the Expose Public Match Data setting</a>
+                            {"."}
+                        </span>
                     </Fragment>
                 ) : null}
             </td>
@@ -570,6 +594,8 @@ const App = () => {
 
     let [showManualInstruction, setShowManualInstruction] = useState(false);
 
+    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+
     return (
         <Fragment>
             <img id="logo" src="images/illuminate_logo.png" alt="Illuminate Logo"/>
@@ -587,14 +613,20 @@ const App = () => {
             {!isOutputMode ? (
                 <div id="whatis">
                     <h3>What is Illuminate?</h3>
-                    <div>Illuminate is a tool that parses the Dota 2 GDPR data and displays what matches you get 
-                    commended or reported in, along with stats for the relevant matches.</div>
+                    <div>
+                        Illuminate is a tool that parses the Dota 2 GDPR data and displays what matches you get
+                        commended or reported in, along with stats for the relevant matches.
+                    </div>
                     <h3>Is my commend/report history sent to a server?</h3>
-                    <div>No. All GDPR data is stored and processed on your browser, and is never sent to any
-                    remote server.</div>
+                    <div>
+                        No. All GDPR data is stored and processed on your browser, and is never sent to any
+                        remote server.
+                    </div>
                     <h3>Where do you get the public match data from?</h3>
-                    <div>All match data is sourced from <a href="https://www.opendota.com/">OpenDota</a>; if it 
-                    doesn't appear, please check that your matches are displayed there!</div>
+                    <div>
+                        All match data is sourced from <a href="https://www.opendota.com/">OpenDota</a>;
+                        if it doesn't appear, please check that your matches are displayed there!
+                    </div>
                 </div>
             ) : null}
 
@@ -658,7 +690,7 @@ const App = () => {
                                             target="_blank">this page</a>.
                                         </li>
                                         <li>
-                                            Press <code>Ctrl+Shift+K</code> to open the Developer Console.
+                                            Press {isFirefox ? (<code>Ctrl+Shift+K</code>) : (<code>Ctrl+Shift+J</code>)} to open the Developer Console.
                                         </li>
                                         <li>
                                             <div>
@@ -710,7 +742,7 @@ const App = () => {
             <hr/>
 
             <div className="mt-3 text-center text-muted">
-                <div>Illuminate v2.3.0</div>
+                <div>Illuminate v2.4.0</div>
                 <div>A Dota 2 Match Report Data Linker</div>
                 <div>Created by <a href="https://github.com/bongikairu">bongikairu</a></div>
                 <div>Powered by the <a href="https://docs.opendota.com/">OpenDota API</a></div>
@@ -724,7 +756,7 @@ const App = () => {
 // Init script
 
 for (let key in localStorage) {
-    if (key.startsWith("match-") || key.startsWith("matchdata-")) localStorage.removeItem(key);
+    if (key.startsWith("match-") || key.startsWith("matchdata-") || key.startsWith("fullmatchdata-")) localStorage.removeItem(key);
 }
 
 ReactDOM.render(
