@@ -141,6 +141,10 @@ const ReportRow = ({gamemode, timestamp, record}) => {
         commend_forgive,
     } = record;
 
+    return (
+        <span className="commend">No Data</span>
+    );
+
     if (commend_forgive || commend_friend || commend_teach || commend_lead) {
         return (
             <span className="commend"><i className="far fa-thumbs-up"></i> Commended</span>
@@ -520,8 +524,8 @@ const OutputCard = () => {
         });
         return {
             ...match,
-            hasCommend,
-            hasReport,
+            hasCommend: false,
+            hasReport: false,
         }
     });
 
@@ -603,6 +607,7 @@ const App = () => {
                 <h1>Illuminate</h1>
                 <h2>See what Dota 2 matches you get commended and reported in</h2>
             </div>
+            <div className={"alert alert-danger"} role={"alert"}>We're working on fixing the website to accept valve's new GDPR data format. Join our <a href="https://discord.gg/x5QHsVV" className="alert-link">Discord</a> for further info.</div>
 
             <hr/>
 
