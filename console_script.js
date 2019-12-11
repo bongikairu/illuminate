@@ -36,24 +36,30 @@
             if (col_list.length === 0) continue;
             // Build row output from {match id}-{indicator}-{timestamp}
             let output = "";
-            output += col_list[0].textContent + "-" + col_list[1].textContent + "-";
+            output += col_list[0].textContent + "-" + col_list[1].textContent + "-" + "-";
             for (let j = 2; j < col_list.length; j++) {
-                output += yes_marks.indexOf(col_list[j].textContent) !== -1 ? "1" : "0";
+                if (j <= 4) {
+                    output += yes_marks.indexOf(col_list[j].textContent) !== -1 ? "1" : "0" + ":";
+                } else {
+                    output += col_list[j].textContent + ":";
+                }
             }
             all_output += output + ","
         }
         // Redirect user to illuminate to have this output data shown in better format
         window.location = "https://illuminate.dotasphere.com/#" + all_output;
     };
-    const load_all_data = () => {
+    const load_all_data = (max_page) => {
+        let left_page = (max_page || 99999) - 1;
         // Get Element Handle
         const b1 = document.getElementById("load_more_button");
         const b2 = document.getElementById("inventory_history_loading");
         // Checking if there is more data by inspecting button and loading text style
         const has_more = () => {
+            if(left_page === 0) return false;
             return (b1 && b1.style.display !== "none") || (b2 && b2.style.display !== "none");
         };
-        const has_load_more = () => b1 && b1.style.display !== "none";
+        const has_load_more = () => left_page !== 0 && b1 && b1.style.display !== "none";
         const load_more = () => b1.click();
         // Loop checking the page, if it is done, read_data()
         const watch_load_more = () => {
